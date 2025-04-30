@@ -266,64 +266,60 @@ html {
         }
 
         /* Dropdown submenu styles */
-        .dropdown-submenu {
-            position: relative;
-        }
-        
-        .dropdown-submenu > .dropdown-menu {
-            position: static !important;
-            left: 100%;
-            margin-top: -6px;
-            margin-left: 0;
-            border-radius: 0.25rem;
-            display: none;
-            padding-left: 10px;
-        }
-        
-        /* Remove hover-based display */
-        /* .dropdown-submenu:hover > .dropdown-menu {
-            display: block;
-        } */
-        
-        .dropdown-submenu .dropdown-item {
-            padding-left: 30px;
-        }
-        
-        /* Replace CSS triangle with Font Awesome icon */
-        .dropdown-submenu > a:after {
-            display: none !important; /* Hide the pseudo-element arrow since we're using an explicit icon */
-        }
-        
-        /* Style for the submenu indicator icon */
-        .submenu-indicator {
-            font-size: 0.7rem;
-            color: var(--text-primary);
-            transition: transform 0.2s ease;
-        }
-        
-        .dropdown-submenu.show .submenu-indicator {
-            transform: rotate(90deg);
-            color: var(--accent-color);
-        }
-        
-        .dropdown-item.dropdown-toggle::after {
-            display: none !important;
-        }
-        
-        /* Add click-based display */
-        .dropdown-submenu.show > .dropdown-menu {
-            display: block;
-        }
-        
-        .dropdown-submenu.pull-left {
-            float: none;
-        }
-        
-        .dropdown-submenu.pull-left > .dropdown-menu {
-            left: -100%;
-            margin-left: 10px;
-            border-radius: 0.25rem;
-        }
+ /* Dropdown submenu styles */
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -8px;
+    margin-left: 1px;
+    border-radius: 0 6px 6px 6px;
+    display: none;
+}
+
+/* Add click-based display */
+.dropdown-submenu.show > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu > a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: var(--text-primary);
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+/* Update hover effect for arrow */
+.dropdown-submenu.show > a:after {
+    border-left-color: var(--accent-color);
+}
+
+/* Mobile styles for dropdown submenu */
+@media (max-width: 991px) {
+    .dropdown-submenu .dropdown-menu {
+        position: static !important;
+        left: 0;
+        margin-left: 20px;
+        margin-top: 0;
+        border-radius: 0;
+        border-left: 2px solid var(--accent-color);
+    }
+    
+    .dropdown-submenu > a:after {
+        transform: rotate(90deg);
+        margin-top: 8px;
+    }
+}
         
         /* End of dropdown submenu styles */
 
@@ -1324,8 +1320,8 @@ html {
                         <li><a class="dropdown-item" href="../target_forms/target.php">Target Form</a></li>
                         <li><a class="dropdown-item" href="../gbp_forms/gbp.php">GPB Form</a></li>
                         <li class="dropdown-submenu">
-                        <a class="dropdown-item dropdown-toggle" href="#" id="ppasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                PPAs Form <i class="fas fa-chevron-right ms-2 submenu-indicator"></i>
+                            <a class="dropdown-item dropdown-toggle" href="#" id="ppasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                PPAs Form
                             </a>
                             <ul class="dropdown-menu dropdown-submenu" aria-labelledby="ppasDropdown">
                                 <li><a class="dropdown-item" href="../ppas_form/ppas.php">Main PPAs Form</a></li>
@@ -2272,37 +2268,32 @@ html {
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
             updateThemeIcon(savedTheme);
 
-            // Handle dropdown submenu
-            document.querySelectorAll('.dropdown-submenu > a').forEach(function(element) {
-                element.addEventListener('click', function(e) {
-                    e.stopPropagation();
+            // Handle dropdown submenu click behavior
+            const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu > a');
+            dropdownSubmenus.forEach(submenu => {
+                submenu.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     
-                    // Toggle the submenu
-                    const parentLi = this.parentElement;
-                    parentLi.classList.toggle('show');
-                    
-                    const submenu = this.nextElementSibling;
-                    if (submenu && submenu.classList.contains('dropdown-menu')) {
-                        if (submenu.style.display === 'block') {
-                            submenu.style.display = 'none';
-                        } else {
-                            submenu.style.display = 'block';
+                    // Close other open submenus
+                    const otherSubmenus = document.querySelectorAll('.dropdown-submenu.show');
+                    otherSubmenus.forEach(menu => {
+                        if (menu !== this.parentElement) {
+                            menu.classList.remove('show');
                         }
-                    }
+                    });
+                    
+                    // Toggle current submenu
+                    this.parentElement.classList.toggle('show');
                 });
             });
-            
+
             // Close submenus when clicking outside
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.dropdown-submenu')) {
                     const openSubmenus = document.querySelectorAll('.dropdown-submenu.show');
                     openSubmenus.forEach(menu => {
                         menu.classList.remove('show');
-                        const submenu = menu.querySelector('.dropdown-menu');
-                        if (submenu) {
-                            submenu.style.display = 'none';
-                        }
                     });
                 }
             });

@@ -1027,44 +1027,13 @@ html {
     position: relative;
 }
 
-.dropdown-submenu > .dropdown-menu {
-    position: static !important;
+.dropdown-submenu .dropdown-menu {
+    top: 0;
     left: 100%;
-    margin-top: -6px;
-    margin-left: 0;
-    border-radius: 0.25rem;
+    margin-top: -8px;
+    margin-left: 1px;
+    border-radius: 0 6px 6px 6px;
     display: none;
-    padding-left: 10px;
-}
-
-/* Remove hover-based display */
-/* .dropdown-submenu:hover > .dropdown-menu {
-    display: block;
-} */
-
-.dropdown-submenu .dropdown-item {
-    padding-left: 30px;
-}
-
-/* Replace CSS triangle with Font Awesome icon */
-.dropdown-submenu > a:after {
-    display: none !important; /* Hide the pseudo-element arrow since we're using an explicit icon */
-}
-
-/* Style for the submenu indicator icon */
-.submenu-indicator {
-    font-size: 0.7rem;
-    color: var(--text-primary);
-    transition: transform 0.2s ease;
-}
-
-.dropdown-submenu.show .submenu-indicator {
-    transform: rotate(90deg);
-    color: var(--accent-color);
-}
-
-.dropdown-item.dropdown-toggle::after {
-    display: none !important;
 }
 
 /* Add click-based display */
@@ -1072,19 +1041,35 @@ html {
     display: block;
 }
 
-.dropdown-submenu.pull-left {
-    float: none;
+.dropdown-submenu > a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: var(--text-primary);
+    margin-top: 5px;
+    margin-right: -10px;
+    transition: border-color 0.2s ease;
 }
 
-.dropdown-submenu.pull-left > .dropdown-menu {
-    left: -100%;
-    margin-left: 10px;
-    border-radius: 0.25rem;
-}
-
-/* Update hover effect for arrow */
-.dropdown-submenu.show > a:after {
+/* Light mode - hover/active arrow color */
+[data-bs-theme="light"] .dropdown-submenu.show > a:after,
+[data-bs-theme="light"] .dropdown-submenu > a:hover:after {
     border-left-color: var(--accent-color);
+}
+
+/* Dark mode - make sure arrow changes to purple when clicked */
+[data-bs-theme="dark"] .dropdown-submenu.show > a:after,
+[data-bs-theme="dark"] .dropdown-submenu > a[aria-expanded="true"]:after,
+[data-bs-theme="dark"] .nav-item.dropdown-submenu.show > a:after {
+    border-left-color: #9c27b0 !important;
+    border-top-color: transparent !important;
+    border-bottom-color: transparent !important;
+    border-right-color: transparent !important;
 }
 
 /* Mobile styles for dropdown submenu */
@@ -1101,6 +1086,11 @@ html {
     .dropdown-submenu > a:after {
         transform: rotate(90deg);
         margin-top: 8px;
+    }
+    
+    /* Ensure mobile arrow also changes color when expanded */
+    [data-bs-theme="dark"] .dropdown-submenu.show > a:after {
+        border-left-color: #9c27b0 !important;
     }
 }
 
@@ -1219,6 +1209,8 @@ html {
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../academic_rank/academic.php">Academic Rank</a></li>
                         <li><a class="dropdown-item" href="../personnel_list/personnel_list.php">Personnel List</a></li>
+                        <li><a class="dropdown-item" href="../signatory/sign.php">Signatory</a></li>
+
                     </ul>
                 </div>
                 <div class="nav-item dropdown">
@@ -1230,7 +1222,7 @@ html {
                         <li><a class="dropdown-item" href="../gbp_forms/gbp.php">GPB Form</a></li>
                         <li class="dropdown-submenu">
                             <a class="dropdown-item dropdown-toggle" href="#" id="ppasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                PPAs Form <i class="fas fa-chevron-right ms-2 submenu-indicator"></i>
+                                PPAs Form
                             </a>
                             <ul class="dropdown-menu dropdown-submenu" aria-labelledby="ppasDropdown">
                                 <li><a class="dropdown-item" href="../ppas_form/ppas.php">Main PPAs Form</a></li>
@@ -1345,58 +1337,7 @@ html {
                 loadReport();
             });
 
-            // Handle dropdown submenu on hover for desktop
-            if (window.matchMedia('(min-width: 992px)').matches) {
-                $('.dropdown-submenu').hover(
-                    function() {
-                        $(this).children('.dropdown-menu').stop(true, true).fadeIn(200);
-                    },
-                    function() {
-                        $(this).children('.dropdown-menu').stop(true, true).fadeOut(200);
-                    }
-                );
-            }
-
-            // Handle dropdown submenu on click for mobile
-            $('.dropdown-submenu > a').on('click', function(e) {
-                if (window.matchMedia('(max-width: 991px)').matches) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $(this).next('.dropdown-menu').toggle();
-                }
-            });
-
-            // Close other submenus when opening a new one
-            $('.dropdown-submenu').on('show.bs.dropdown', function() {
-                $('.dropdown-submenu .dropdown-menu').not($(this).children('.dropdown-menu')).hide();
-            });
-
-            // Replace hover behavior with click behavior for all screen sizes
-            $('.dropdown-submenu > a').off('click').on('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Close other open submenus
-                $('.dropdown-submenu.show').not($(this).parent()).removeClass('show');
-                
-                // Toggle current submenu
-                $(this).parent().toggleClass('show');
-            });
-
-            // Close submenus when clicking outside
-            $(document).on('click', function(e) {
-                if (!$(e.target).closest('.dropdown-submenu').length) {
-                    $('.dropdown-submenu.show').removeClass('show');
-                }
-            });
-
-            // Handle form submission
-            $('#reportForm').on('submit', function(e) {
-                e.preventDefault();
-                loadReport();
-            });
-
-            // Handle dropdown submenu behavior with click for all screen sizes
+            // Handle dropdown submenu with click-based behavior for all screen sizes
             $('.dropdown-submenu > a').on('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1406,6 +1347,7 @@ html {
                 
                 // Toggle current submenu
                 $(this).parent().toggleClass('show');
+                $(this).next('.dropdown-menu').toggle();
             });
 
             // Close submenus when clicking outside
@@ -2539,19 +2481,6 @@ html {
                     });
                 }
             });
-            
-            // Disable jQuery hover behavior using vanilla JS
-            setTimeout(() => {
-                document.querySelectorAll('.dropdown-submenu').forEach(menu => {
-                    menu.onmouseenter = null;
-                    menu.onmouseleave = null;
-                });
-                // Also use jQuery to unbind hover events
-                if (typeof $ !== 'undefined') {
-                    $('.dropdown-submenu').unbind('mouseenter mouseleave');
-                    $('.dropdown-submenu').off('hover');
-                }
-            }, 500);
         });
 
         function handleLogout(event) {
