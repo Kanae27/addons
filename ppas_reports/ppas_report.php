@@ -1913,7 +1913,7 @@ html {
     <!-- Main Content -->
     <div class="main-content">
         <div class="page-title">
-            <i class="fas fa-chart-bar"></i>
+        <i class="fas fa-file-alt"></i>
             <h2>PPAS Quarterly Reports</h2>
         </div>
 
@@ -1924,7 +1924,7 @@ html {
                     <div class="row align-items-end g-2">
                         <div class="col-md-3">
                             <label for="campus" class="form-label small mb-1">Campus</label>
-                            <select class="form-select theme-form-select" id="campus" required <?php echo !$isCentral ? 'disabled' : ''; ?>>
+                            <select class="form-select theme-form-select" id="campus" style="height: 45px;" required <?php echo !$isCentral ? 'disabled' : ''; ?>>
                                 <?php if (!$isCentral): ?>
                                 <option value="<?php echo $userCampus; ?>" selected><?php echo $userCampus; ?></option>
                                 <?php else: ?>
@@ -1934,18 +1934,18 @@ html {
                         </div>
                         <div class="col-md-3">
                             <label for="year" class="form-label small mb-1">Year</label>
-                            <select class="form-select theme-form-select" id="year" required>
+                            <select class="form-select theme-form-select" id="year" style="height: 45px;" required>
                                 <option value="">Select Year</option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label for="quarter" class="form-label small mb-1">Quarter</label>
-                            <select class="form-select theme-form-select" id="quarter" required>
+                            <select class="form-select theme-form-select" id="quarter" style="height: 45px;" required>
                                 <option value="">Select Quarter</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-primary w-100" style="height: 38px; border-radius: 6px;">
+                            <button type="submit" class="btn btn-primary w-100" style="height: 45px; border-radius: 6px;">
                                 <i class="fas fa-sync-alt me-1"></i> Generate Report
                             </button>
                         </div>
@@ -1953,6 +1953,8 @@ html {
                 </form>
             </div>
         </div>
+
+        <div class="mb-4"></div>
 
         <!-- Report Preview Card -->
         <div class="card report-card">
