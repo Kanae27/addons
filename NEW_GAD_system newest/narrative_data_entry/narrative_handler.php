@@ -1,10 +1,30 @@
 <?php
 session_start();
 require_once '../config.php';
+require_once 'debug_logger.php'; // Include debug logger
+
+// Only include db_connection if DB constants aren't already defined
+if (!defined('DB_HOST')) {
+    require_once '../includes/db_connection.php';
+}
+
+// Create a mysqli connection (always) - override any existing PDO connection
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Log the start of the request
+debug_to_file('Request started', [
+    'POST' => $_POST,
+    'SESSION' => $_SESSION,
+    'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD']
+]);
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
     http_response_code(401);
+    debug_to_file('Unauthorized access attempt');
     echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
     exit();
 }
@@ -22,6 +42,7 @@ function sanitize_input($data) {
 
 // Get the action type from the request
 $action = isset($_POST['action']) ? $_POST['action'] : '';
+debug_to_file('Action received', $action);
 
 // Handle different operations based on action
 switch ($action) {
@@ -63,31 +84,32 @@ switch ($action) {
         break;
     default:
         // For form submissions without an action (assuming it's a save operation)
+        debug_to_file('No specific action, assuming default form submission');
         handleFormSubmission();
         break;
 }
 
 // Handle form submission
 function handleFormSubmission() {
+    debug_to_file('Form submission started');
+    
     try {
         global $conn;
         
-        // Connect to database if not already connected
-        if (!isset($conn) || !($conn instanceof mysqli)) {
-            $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            
-            if ($conn->connect_error) {
-                throw new Exception("Database connection failed: " . $conn->connect_error);
-            }
-        }
+        // Debug data received
+        debug_to_file('POST data', $_POST);
         
-        // Get the POST data
+        // Extract form data
         $narrativeId = isset($_POST['narrative_id']) ? intval($_POST['narrative_id']) : 0;
+        debug_to_file('Narrative ID', $narrativeId);
+        
         $campus = isset($_POST['campus']) ? sanitize_input($_POST['campus']) : '';
+        debug_to_file('Campus value', $campus);
         
         // Ensure campus is set for central users
         $isCentral = isset($_SESSION['username']) && $_SESSION['username'] === 'Central';
         if ($isCentral && empty($campus)) {
+            debug_to_file('Campus not selected for Central user');
             throw new Exception("Campus must be selected for Central users");
         }
         
@@ -102,38 +124,107 @@ function handleFormSubmission() {
         $issues = isset($_POST['issues']) ? sanitize_input($_POST['issues']) : '';
         $recommendations = isset($_POST['recommendations']) ? sanitize_input($_POST['recommendations']) : '';
         $ps_attribution = isset($_POST['psAttribution']) ? sanitize_input($_POST['psAttribution']) : '';
-        $evaluation = isset($_POST['evaluation']) ? sanitize_input($_POST['evaluation']) : '';
+        // Don't sanitize evaluation data since it's JSON
+        $evaluation = isset($_POST['evaluation']) ? $_POST['evaluation'] : '';
+        
+        // Get the new separate rating fields
+        $activity_ratings = isset($_POST['activity_ratings']) ? $_POST['activity_ratings'] : '';
+        $timeliness_ratings = isset($_POST['timeliness_ratings']) ? $_POST['timeliness_ratings'] : '';
+        
+        // Debug log the evaluation data
+        debug_to_file("Raw evaluation data", $evaluation);
+        debug_to_file("Activity ratings data", $activity_ratings);
+        debug_to_file("Timeliness ratings data", $timeliness_ratings);
+        
+        // Validate that it's valid JSON
+        if (!empty($evaluation)) {
+            $json_valid = json_decode($evaluation) !== null;
+            debug_to_file("Evaluation JSON valid", $json_valid ? 'yes' : 'no');
+        }
+        
+        if (!empty($activity_ratings)) {
+            $json_valid = json_decode($activity_ratings) !== null;
+            debug_to_file("Activity ratings JSON valid", $json_valid ? 'yes' : 'no');
+        }
+        
+        if (!empty($timeliness_ratings)) {
+            $json_valid = json_decode($timeliness_ratings) !== null;
+            debug_to_file("Timeliness ratings JSON valid", $json_valid ? 'yes' : 'no');
+        }
+        
         $gender_issue = isset($_POST['genderIssue']) ? sanitize_input($_POST['genderIssue']) : '';
         $photo_caption = isset($_POST['photoCaption']) ? sanitize_input($_POST['photoCaption']) : '';
         
         $username = $_SESSION['username'];
+        debug_to_file('Username', $username);
         
         // Get temporary photos from session for new narratives
         $photoPath = '[]'; // Default empty JSON array
         if ($narrativeId == 0 && isset($_SESSION['temp_photos']) && !empty($_SESSION['temp_photos'])) {
             $photoPath = json_encode($_SESSION['temp_photos']);
+            debug_to_file('Using temp_photos from session', $photoPath);
+        }
+        
+        // Add photo paths if available from session
+        if (isset($_SESSION['temp_narrative_uploads']) && is_array($_SESSION['temp_narrative_uploads'])) {
+            $photoPathsArray = $_SESSION['temp_narrative_uploads'];
+            $photoPath = !empty($photoPathsArray) ? $photoPathsArray[0] : '';
+            $photoPathsJson = json_encode($photoPathsArray);
+            debug_to_file('Using temp_narrative_uploads from session', [
+                'photoPath' => $photoPath,
+                'photoPathsJson' => $photoPathsJson
+            ]);
+            
+            $query = "UPDATE narrative_entries SET 
+                      campus = ?, 
+                      year = ?, 
+                      title = ?, 
+                      background = ?, 
+                      participants = ?, 
+                      topics = ?, 
+                      results = ?, 
+                      lessons = ?, 
+                      what_worked = ?, 
+                      issues = ?, 
+                      recommendations = ?, 
+                      ps_attribution = ?, 
+                      evaluation = ?, 
+                      activity_ratings = ?,
+                      timeliness_ratings = ?,
+                      photo_caption = ?, 
+                      gender_issue = ?,
+                      updated_by = ?,
+                      updated_at = NOW(),
+                      photo_path = ?,
+                      photo_paths = ?
+                    WHERE id = ?";
+            
+            $types = "ssssssssssssssssssssi";
+            $params = [
+                $campus, $year, $activity, $background, $participants, 
+                $topics, $results, $lessons, $what_worked, $issues, 
+                $recommendations, $ps_attribution, $evaluation, $activity_ratings, $timeliness_ratings,
+                $photo_caption, $gender_issue, $username, $photoPath, $photoPathsJson, $narrativeId
+            ];
+            
+            // Clear the session variable after use
+            unset($_SESSION['temp_narrative_uploads']);
         }
         
         // If editing an existing record
         if ($narrativeId > 0) {
-            // Get the current photo_path for this narrative
-            $query = "SELECT photo_path FROM narrative_entries WHERE id = ?";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("i", $narrativeId);
-            $stmt->execute();
-            $result = $stmt->get_result();
+            debug_to_file('Updating existing record');
             
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                // Use existing photo path for updates
-                $photoPath = $row['photo_path'];
-            }
-            
-            // Update the record
-            // First check if updated_by column exists
+            // Check if updated_by column exists
             $columnExistsQuery = "SHOW COLUMNS FROM narrative_entries LIKE 'updated_by'";
-            $columnResult = $conn->query($columnExistsQuery);
+            $columnStmt = $conn->prepare($columnExistsQuery);
+            $columnStmt->execute();
+
+            // Fix: use mysqli style result processing instead of PDO's rowCount()
+            $columnResult = $columnStmt->get_result();
             $updatedByExists = $columnResult && $columnResult->num_rows > 0;
+
+            debug_to_file('updated_by column exists', $updatedByExists ? 'yes' : 'no');
             
             if ($updatedByExists) {
                 $query = "UPDATE narrative_entries SET 
@@ -150,25 +241,53 @@ function handleFormSubmission() {
                           recommendations = ?, 
                           ps_attribution = ?, 
                           evaluation = ?, 
+                          activity_ratings = ?,
+                          timeliness_ratings = ?,
                           photo_caption = ?, 
                           gender_issue = ?,
                           updated_by = ?,
+                          photo_path = ?,
+                          photo_paths = ?,
                           updated_at = NOW()
                         WHERE id = ?";
                         
                 $stmt = $conn->prepare($query);
                 
                 if (!$stmt) {
-                    throw new Exception("Database prepare error: " . $conn->error);
+                    debug_to_file('Database prepare error', $conn->errorInfo());
+                    throw new Exception("Database prepare error");
                 }
                 
-                $stmt->bind_param(
-                    "ssssssssssssssssi", 
+                // Get existing photo_paths from database if not already set
+                if (!isset($photoPath) || !isset($photoPathsJson)) {
+                    $getPhotoQuery = "SELECT photo_path, photo_paths FROM narrative_entries WHERE id = ?";
+                    $photoStmt = $conn->prepare($getPhotoQuery);
+                    $photoStmt->bind_param("i", $narrativeId);
+                    $photoStmt->execute();
+                    $photoResult = $photoStmt->get_result();
+                    $photoRow = $photoResult->fetch_assoc();
+                    
+                    if ($photoRow) {
+                        $photoPath = $photoRow['photo_path'] ?? '';
+                        $photoPathsJson = $photoRow['photo_paths'] ?? '[]';
+                        debug_to_file('Retrieved existing photo data', [
+                            'photoPath' => $photoPath,
+                            'photoPathsJson' => $photoPathsJson
+                        ]);
+                    }
+                }
+                
+                // Use PDO-style parameter binding with photo fields
+                $params = [
                     $campus, $year, $activity, $background, $participants, 
                     $topics, $results, $lessons, $what_worked, $issues, 
-                    $recommendations, $ps_attribution, $evaluation, $photo_caption, $gender_issue,
-                    $username, $narrativeId
-                );
+                    $recommendations, $ps_attribution, $evaluation, $activity_ratings, $timeliness_ratings,
+                    $photo_caption, $gender_issue, $username, $photoPath, $photoPathsJson, $narrativeId
+                ];
+                
+                $stmt->execute($params);
+                
+                debug_to_file('Update query prepared with updated_by and photo fields');
             } else {
                 $query = "UPDATE narrative_entries SET 
                           campus = ?, 
@@ -184,108 +303,185 @@ function handleFormSubmission() {
                           recommendations = ?, 
                           ps_attribution = ?, 
                           evaluation = ?, 
+                          activity_ratings = ?,
+                          timeliness_ratings = ?,
                           photo_caption = ?, 
-                          gender_issue = ?
+                          gender_issue = ?,
+                          photo_path = ?,
+                          photo_paths = ?
                         WHERE id = ?";
                         
                 $stmt = $conn->prepare($query);
                 
                 if (!$stmt) {
-                    throw new Exception("Database prepare error: " . $conn->error);
+                    debug_to_file('Database prepare error', $conn->errorInfo());
+                    throw new Exception("Database prepare error");
                 }
                 
-                $stmt->bind_param(
-                    "sssssssssssssssi", 
+                // Get existing photo_paths from database if not already set
+                if (!isset($photoPath) || !isset($photoPathsJson)) {
+                    $getPhotoQuery = "SELECT photo_path, photo_paths FROM narrative_entries WHERE id = ?";
+                    $photoStmt = $conn->prepare($getPhotoQuery);
+                    $photoStmt->bind_param("i", $narrativeId);
+                    $photoStmt->execute();
+                    $photoResult = $photoStmt->get_result();
+                    $photoRow = $photoResult->fetch_assoc();
+                    
+                    if ($photoRow) {
+                        $photoPath = $photoRow['photo_path'] ?? '';
+                        $photoPathsJson = $photoRow['photo_paths'] ?? '[]';
+                        debug_to_file('Retrieved existing photo data', [
+                            'photoPath' => $photoPath,
+                            'photoPathsJson' => $photoPathsJson
+                        ]);
+                    }
+                }
+                
+                // Use PDO-style parameter binding
+                $params = [
                     $campus, $year, $activity, $background, $participants, 
                     $topics, $results, $lessons, $what_worked, $issues, 
-                    $recommendations, $ps_attribution, $evaluation, $photo_caption, $gender_issue,
-                    $narrativeId
-                );
+                    $recommendations, $ps_attribution, $evaluation, $activity_ratings, $timeliness_ratings,
+                    $photo_caption, $gender_issue, $photoPath, $photoPathsJson, $narrativeId
+                ];
+                
+                $stmt->execute($params);
+                
+                debug_to_file('Update query prepared with photo fields');
             }
             
         } else {
+            debug_to_file('Creating new record');
+            
             // Check if created_by column exists before using it
             $columnExistsQuery = "SHOW COLUMNS FROM narrative_entries LIKE 'created_by'";
-            $columnResult = $conn->query($columnExistsQuery);
+            $columnStmt = $conn->prepare($columnExistsQuery);
+            $columnStmt->execute();
+
+            // Fix: use mysqli style result processing instead of PDO's rowCount()
+            $columnResult = $columnStmt->get_result();
             $createdByExists = $columnResult && $columnResult->num_rows > 0;
+
+            debug_to_file('created_by column exists', $createdByExists ? 'yes' : 'no');
             
             if ($createdByExists) {
                 // Insert a new record with created_by
                 $query = "INSERT INTO narrative_entries (
                           campus, year, title, background, participants, 
                           topics, results, lessons, what_worked, issues, 
-                          recommendations, ps_attribution, evaluation, photo_path, photo_caption, gender_issue,
+                          recommendations, ps_attribution, evaluation, activity_ratings, timeliness_ratings, 
+                          photo_path, photo_paths, photo_caption, gender_issue,
                           created_by, created_at
                         ) VALUES (
                           ?, ?, ?, ?, ?, 
                           ?, ?, ?, ?, ?, 
-                          ?, ?, ?, ?, ?, ?,
+                          ?, ?, ?, ?, ?, 
+                          ?, ?, ?, ?,
                           ?, NOW()
                         )";
                         
                 $stmt = $conn->prepare($query);
                 
                 if (!$stmt) {
-                    throw new Exception("Database prepare error: " . $conn->error);
+                    debug_to_file('Database prepare error', $conn->errorInfo());
+                    throw new Exception("Database prepare error");
                 }
                 
-                $stmt->bind_param(
-                    "sssssssssssssssss", 
+                // Ensure we have photo_paths as JSON
+                if (!isset($photoPathsJson) && isset($photoPath)) {
+                    $photoPathsJson = json_encode([$photoPath]);
+                    debug_to_file('Created photoPathsJson from photoPath', $photoPathsJson);
+                }
+                
+                // Use PDO-style parameter binding
+                $params = [
                     $campus, $year, $activity, $background, $participants, 
                     $topics, $results, $lessons, $what_worked, $issues, 
-                    $recommendations, $ps_attribution, $evaluation, $photoPath, $photo_caption, $gender_issue,
+                    $recommendations, $ps_attribution, $evaluation, $activity_ratings, $timeliness_ratings, 
+                    $photoPath, $photoPathsJson, $photo_caption, $gender_issue,
                     $username
-                );
+                ];
+                
+                $stmt->execute($params);
+                
+                debug_to_file('Insert query prepared with created_by');
             } else {
                 // Insert a new record without created_by
                 $query = "INSERT INTO narrative_entries (
                           campus, year, title, background, participants, 
                           topics, results, lessons, what_worked, issues, 
-                          recommendations, ps_attribution, evaluation, photo_path, photo_caption, gender_issue,
+                          recommendations, ps_attribution, evaluation, activity_ratings, timeliness_ratings, 
+                          photo_path, photo_paths, photo_caption, gender_issue,
                           created_at
                         ) VALUES (
                           ?, ?, ?, ?, ?, 
                           ?, ?, ?, ?, ?, 
-                          ?, ?, ?, ?, ?, ?,
+                          ?, ?, ?, ?, ?, 
+                          ?, ?, ?, ?,
                           NOW()
                         )";
                         
                 $stmt = $conn->prepare($query);
                 
                 if (!$stmt) {
-                    throw new Exception("Database prepare error: " . $conn->error);
+                    debug_to_file('Database prepare error', $conn->errorInfo());
+                    throw new Exception("Database prepare error");
                 }
                 
-                $stmt->bind_param(
-                    "ssssssssssssssss", 
+                // Ensure we have photo_paths as JSON
+                if (!isset($photoPathsJson) && isset($photoPath)) {
+                    $photoPathsJson = json_encode([$photoPath]);
+                    debug_to_file('Created photoPathsJson from photoPath', $photoPathsJson);
+                }
+                
+                // Use PDO-style parameter binding
+                $params = [
                     $campus, $year, $activity, $background, $participants, 
                     $topics, $results, $lessons, $what_worked, $issues, 
-                    $recommendations, $ps_attribution, $evaluation, $photoPath, $photo_caption, $gender_issue
-                );
+                    $recommendations, $ps_attribution, $evaluation, $activity_ratings, $timeliness_ratings, 
+                    $photoPath, $photoPathsJson, $photo_caption, $gender_issue
+                ];
+                
+                $stmt->execute($params);
             }
         }
         
-        if (!$stmt->execute()) {
-            throw new Exception("Error saving record: " . $stmt->error);
+        debug_to_file('Executing query');
+        // Fix: use mysqli-specific method to check affected rows instead of PDO's rowCount()
+        debug_to_file('Query execution result', $stmt->affected_rows > 0 ? 'success' : 'failed');
+        
+        // Get the ID of the inserted record
+        $newId = $narrativeId > 0 ? $narrativeId : $conn->insert_id;
+        debug_to_file('Record ID', $newId);
+        
+        // Check if the evaluation was saved correctly
+        $checkQuery = "SELECT evaluation FROM narrative_entries WHERE id = ?";
+        $checkStmt = $conn->prepare($checkQuery);
+        $checkStmt->bind_param("i", $newId);
+        $checkStmt->execute();
+        $result = $checkStmt->get_result();
+        $row = $result->fetch_assoc();
+
+        if ($row) {
+            debug_to_file('Saved evaluation data', $row['evaluation']);
         }
         
-        // If this was a new record, get the new ID
-        if ($narrativeId == 0) {
-            $narrativeId = $conn->insert_id;
-            
-            // Clear temporary photos from session after successful save
-            unset($_SESSION['temp_photos']);
-        }
-        
-        // Return success response
+        debug_to_file('Sending success response');
         echo json_encode([
             'success' => true, 
-            'message' => 'Narrative data saved successfully', 
-            'narrative_id' => $narrativeId
+            'message' => 'Narrative ' . ($narrativeId > 0 ? 'updated' : 'added') . ' successfully',
+            'narrative_id' => $newId
         ]);
+        
+        // Clear any temporary session data
+        if (isset($_SESSION['temp_photos'])) {
+            unset($_SESSION['temp_photos']);
+            debug_to_file('Cleared temp_photos from session');
+        }
         
     } catch (Exception $e) {
         // Return error response
+        debug_to_file('Exception caught', $e->getMessage());
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
 }
@@ -442,28 +638,69 @@ function getSingleNarrative() {
             $entry = $result->fetch_assoc();
             
             // Process photo paths if they exist
-            if (!empty($entry['photo_path'])) {
-                // Check if it's a JSON string (new format)
-                if (substr($entry['photo_path'], 0, 1) === '[') {
-                    $photoPaths = json_decode($entry['photo_path'], true);
-                    
-                    // Convert filenames to full paths for display
-                    $fullPaths = [];
-                    foreach ($photoPaths as $path) {
-                        // Just a filename, add photos/ directory prefix
-                        $fullPaths[] = 'photos/' . $path;
+            if (!empty($entry['photo_paths'])) {
+                // First try to use the dedicated photo_paths column
+                if (is_string($entry['photo_paths'])) {
+                    try {
+                        $photoPaths = json_decode($entry['photo_paths'], true);
+                        if (is_array($photoPaths)) {
+                            $entry['photo_paths'] = $photoPaths;
+                        } else {
+                            $entry['photo_paths'] = [];
+                        }
+                    } catch (Exception $e) {
+                        debug_to_file("Error parsing photo_paths: " . $e->getMessage());
+                        $entry['photo_paths'] = [];
                     }
-                    
-                    $entry['photo_paths'] = $fullPaths; // Add as separate array property
-                    $entry['photo_path'] = isset($fullPaths[0]) ? $fullPaths[0] : ''; // Compatibility with old code
+                }
+            } else {
+                // Initialize as empty array if not set
+                $entry['photo_paths'] = [];
+            }
+
+            // Also handle the legacy photo_path for backwards compatibility
+            if (!empty($entry['photo_path'])) {
+                // If photo_path is an array JSON string (older format), parse it
+                if (is_string($entry['photo_path']) && substr($entry['photo_path'], 0, 1) === '[') {
+                    try {
+                        $legacyPaths = json_decode($entry['photo_path'], true);
+                        
+                        // Add these paths to photo_paths array if they're not already there
+                        if (is_array($legacyPaths)) {
+                            foreach ($legacyPaths as $path) {
+                                if (!in_array($path, $entry['photo_paths'])) {
+                                    $entry['photo_paths'][] = $path;
+                                }
+                            }
+                        }
+                        
+                        // Use the first path as the main photo_path
+                        $entry['photo_path'] = !empty($legacyPaths) ? $legacyPaths[0] : '';
+                    } catch (Exception $e) {
+                        debug_to_file("Error parsing legacy photo_path: " . $e->getMessage());
+                    }
                 } else {
-                    // Single path (old format) - ensure it has photos/ prefix
-                    if (strpos($entry['photo_path'], 'photos/') !== 0 && strpos($entry['photo_path'], 'http') !== 0) {
-                        $entry['photo_path'] = 'photos/' . $entry['photo_path'];
-                    } 
+                    // Single path - add to photo_paths if not already there
+                    if (!in_array($entry['photo_path'], $entry['photo_paths'])) {
+                        $entry['photo_paths'][] = $entry['photo_path'];
+                    }
+                }
+                
+                // Make sure photo_path has proper prefix
+                if (!empty($entry['photo_path']) && strpos($entry['photo_path'], 'photos/') !== 0 && strpos($entry['photo_path'], 'http') !== 0) {
+                    $entry['photo_path'] = 'photos/' . $entry['photo_path'];
                 }
             }
-            
+
+            // Make sure all paths in photo_paths have proper prefix
+            if (!empty($entry['photo_paths']) && is_array($entry['photo_paths'])) {
+                foreach ($entry['photo_paths'] as $key => $path) {
+                    if (strpos($path, 'photos/') !== 0 && strpos($path, 'http') !== 0) {
+                        $entry['photo_paths'][$key] = 'photos/' . $path;
+                    }
+                }
+            }
+
             echo json_encode(['success' => true, 'data' => $entry]);
         } else {
             throw new Exception("Narrative not found");

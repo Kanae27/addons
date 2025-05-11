@@ -1,0 +1,77 @@
+ Non-central user campus set to: Lipa
+ Non-central user editing narratives for campus: Lipa
+ Loaded 3 narratives for editing
+ Loaded narrative data: Object
+ Photo paths: Array(2)
+ Image path: photos/narrative_1746870275_0.jpeg
+ Display path: ../photos/narrative_1746870275_0.jpeg
+ Image path: photos/narrative_1746949616_0.jpeg
+ Display path: ../photos/narrative_1746949616_0.jpeg
+ Evaluation data: Object
+ Uploading images for narrative ID: 4, campus: Lipa
+ Adding file to upload: BatStateU-NEU-Logo (3).png (82452 bytes)
+ Image upload response: Object
+data_entry.php:2155 Image path: narrative_1746870275_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746870275_0.jpeg
+data_entry.php:2155 Image path: photos/narrative_1746949616_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746949616_0.jpeg
+data_entry.php:2155 Image path: photos/narrative_1746950224_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746950224_0.jpeg
+data_entry.php:1874 Updated currentNarrativeId to: 4
+data_entry.php:2741 Submitting form with evaluation data: {"activity":{"Excellent":{"BatStateU":22,"Others":22},"Very Satisfactory":{"BatStateU":22,"Others":2},"Satisfactory":{"BatStateU":2,"Others":22},"Fair":{"BatStateU":222,"Others":22},"Poor":{"BatStateU":22,"Others":2}},"timeliness":{"Excellent":{"BatStateU":22,"Others":22},"Very Satisfactory":{"BatStateU":52,"Others":2},"Satisfactory":{"BatStateU":552,"Others":22346},"Fair":{"BatStateU":552,"Others":566},"Poor":{"BatStateU":5532,"Others":55}}}
+data_entry.php:2471 Non-central user editing narratives for campus: Lipa
+data_entry.php:2489 Loaded 3 narratives for editing
+data_entry.php:2941 Loaded narrative data: Object
+data_entry.php:3001 Photo paths: Array(3)
+data_entry.php:2155 Image path: photos/narrative_1746870275_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746870275_0.jpeg
+data_entry.php:2155 Image path: photos/narrative_1746949616_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746949616_0.jpeg
+data_entry.php:2155 Image path: photos/narrative_1746950224_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746950224_0.jpeg
+data_entry.php:3011 Evaluation data: Object
+data_entry.php:2741 Submitting form with evaluation data: {"activity":{"Excellent":{"BatStateU":22,"Others":22},"Very Satisfactory":{"BatStateU":22,"Others":2},"Satisfactory":{"BatStateU":2,"Others":22},"Fair":{"BatStateU":222,"Others":22},"Poor":{"BatStateU":22,"Others":2}},"timeliness":{"Excellent":{"BatStateU":22,"Others":22},"Very Satisfactory":{"BatStateU":52,"Others":2},"Satisfactory":{"BatStateU":5522,"Others":22346},"Fair":{"BatStateU":552,"Others":566},"Poor":{"BatStateU":5532,"Others":55}}}
+data_entry.php:2471 Non-central user editing narratives for campus: Lipa
+data_entry.php:2489 Loaded 3 narratives for editing
+data_entry.php:2941 Loaded narrative data: Object
+data_entry.php:3001 Photo paths: Array(3)
+data_entry.php:2155 Image path: photos/narrative_1746870275_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746870275_0.jpeg
+data_entry.php:2155 Image path: photos/narrative_1746949616_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746949616_0.jpeg
+data_entry.php:2155 Image path: photos/narrative_1746950224_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746950224_0.jpeg
+data_entry.php:3011 Evaluation data: Object
+data_entry.php:2622 Non-central user viewing narratives for campus: Lipa
+data_entry.php:2640 Loaded 3 narratives for viewing
+data_entry.php:3432 Viewing narrative details: Object
+data_entry.php:3518 View mode - Image path: photos/narrative_1746870275_0.jpeg
+data_entry.php:3519 View mode - Display path: ../photos/narrative_1746870275_0.jpeg
+data_entry.php:3518 View mode - Image path: photos/narrative_1746949616_0.jpeg
+data_entry.php:3519 View mode - Display path: ../photos/narrative_1746949616_0.jpeg
+data_entry.php:3518 View mode - Image path: photos/narrative_1746950224_0.jpeg
+data_entry.php:3519 View mode - Display path: ../photos/narrative_1746950224_0.jpeg
+data_entry.php:2556 Non-central user deleting narratives for campus: Lipa
+data_entry.php:2574 Loaded 3 narratives for deletion
+data_entry.php:2556 Non-central user deleting narratives for campus: Lipa
+data_entry.php:2574 Loaded 2 narratives for deletion
+data_entry.php:1828 Uploading images for narrative ID: 0, campus: Lipa
+data_entry.php:1836 Adding file to upload: c0308476-1e05-46de-8903-1b66bc7a2036.jpeg (114881 bytes)
+data_entry.php:1862 Image upload response: Object
+data_entry.php:2155 Image path: photos/narrative_1746950323_0.jpeg
+data_entry.php:2156 Display path: ../photos/narrative_1746950323_0.jpeg
+data_entry.php:2741 Submitting form with evaluation data: {"activity":{"Excellent":{"BatStateU":2,"Others":2},"Very Satisfactory":{"BatStateU":2,"Others":2},"Satisfactory":{"BatStateU":2,"Others":2},"Fair":{"BatStateU":2,"Others":2},"Poor":{"BatStateU":2,"Others":2}},"timeliness":{"Excellent":{"BatStateU":2,"Others":2},"Very Satisfactory":{"BatStateU":2,"Others":2},"Satisfactory":{"BatStateU":2,"Others":2},"Fair":{"BatStateU":2,"Others":2},"Poor":{"BatStateU":2,"Others":222}}}
+data_entry.php:2818 AJAX Error: parsererror - SyntaxError: Unexpected token '<', " <br />
+<fo"... is not valid JSON
+error @ data_entry.php:2818
+data_entry.php:2819 Response Text:  <br />
+<font size='1'><table class='xdebug-error xe-uncaught-exception' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
+<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Fatal error: Uncaught Error: Call to undefined method mysqli::lastInsertId() in C:\wamp64\www\NEW_GAD_system newest\narrative_data_entry\narrative_handler.php on line <i>392</i></th></tr>
+<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Error: Call to undefined method mysqli::lastInsertId() in C:\wamp64\www\NEW_GAD_system newest\narrative_data_entry\narrative_handler.php on line <i>392</i></th></tr>
+<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+<tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
+<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0006</td><td bgcolor='#eeeeec' align='right'>374184</td><td bgcolor='#eeeeec'>{main}(  )</td><td title='C:\wamp64\www\NEW_GAD_system newest\narrative_data_entry\narrative_handler.php' bgcolor='#eeeeec'>...\narrative_handler.php<b>:</b>0</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>2</td><td bgcolor='#eeeeec' align='center'>0.0515</td><td bgcolor='#eeeeec' align='right'>473536</td><td bgcolor='#eeeeec'>handleCreate(  )</td><td title='C:\wamp64\www\NEW_GAD_system newest\narrative_data_entry\narrative_handler.php' bgcolor='#eeeeec'>...\narrative_handler.php<b>:</b>50</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>3</td><td bgcolor='#eeeeec' align='center'>0.0515</td><td bgcolor='#eeeeec' align='right'>473568</td><td bgcolor='#eeeeec'>handleFormSubmission(  )</td><td title='C:\wamp64\www\NEW_GAD_system newest\narrative_data_entry\narrative_handler.php' bgcolor='#eeeeec'>...\narrative_handler.php<b>:</b>442</td></tr>
+</table></font>
+

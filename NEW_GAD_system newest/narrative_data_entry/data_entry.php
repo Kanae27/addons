@@ -1202,184 +1202,22 @@ html {
             transition: all 0.3s ease;
             font-weight: 500;
         }
-}
 
-        /* Highlight active section */
-        .sidebar .nav-link.active {
-            color: var(--bs-primary) !important;
-            font-weight: bold;
-        }
-
-        /* Add custom styles for narrative modals to match gbp.php */
-        /* Modal styles */
-        .modal-backdrop.show {
-            opacity: 0.5;
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        .modal-content {
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-        }
-
-        .modal-header {
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--bg-secondary);
-            padding: 1rem 1.5rem;
-            border-top-left-radius: 1rem;
-            border-top-right-radius: 1rem;
-        }
-
-        .modal-header .btn-close {
-            padding: 0.75rem;
-            margin: -0.5rem -0.5rem -0.5rem auto;
-            color: var(--text-primary);
-            filter: none;
-            opacity: 0.75;
-        }
-
-        /* Modal body styling */
-        .modal-body {
-            padding: 1.5rem;
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-        }
-
-        /* Tables inside modals */
-        .modal-body .table-responsive {
-            /* Remove the max-height and overflow-y properties to avoid double scrollbars */
-            margin-top: 1rem;
-        }
-
-        .modal-body .table {
-            margin-bottom: 0;
-        }
-
-        /* Modal title styling */
-        .modal-title {
-            font-weight: 600;
-            color: var(--card-title);
-        }
-
-        /* Large modals */
-        .modal-xl {
-            max-width: 90%;
-        }
-
-        /* Row hover effects */
-        .narrative-row:hover {
-            background-color: rgba(106, 27, 154, 0.1) !important;
-            transition: background-color 0.2s ease;
-        }
-
-        /* Narrative details styling */
-        .narrative-details h6 {
-            color: var(--accent-color);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.25rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .narrative-details p {
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            background-color: var(--bg-secondary);
-            border-radius: 0.5rem;
-        }
-
-        /* Dark theme support for modals */
-        [data-bs-theme="dark"] .modal-content {
-            background-color: var(--card-bg);
-            border-color: var(--border-color);
-        }
-
-        [data-bs-theme="dark"] .modal-header {
-            background-color: var(--bg-secondary);
-            border-color: var(--border-color);
-        }
-
-        [data-bs-theme="dark"] .modal-footer {
-            border-color: var(--border-color);
-        }
-
-        /* Confirmation modal styling */
-        #deleteNarrativeModal .table {
-            margin-bottom: 0;
-        }
-
-        #deleteNarrativeModal .table th {
-            background-color: var(--bg-secondary);
-        }
-
-        /* ... existing styles ... */
-        /* Override styles for the active dropdown toggle - add at end for higher priority */
-        .nav-link.active.dropdown-toggle,
-        .nav-item .nav-link.active.dropdown-toggle {
-            color: var(--accent-color) !important;
-        }
-
-        [data-bs-theme="light"] .nav-link.active.dropdown-toggle,
-        [data-bs-theme="light"] .nav-item .nav-link.active.dropdown-toggle {
-            color: var(--accent-color) !important;
-        }
-
-        [data-bs-theme="dark"] .nav-link.active.dropdown-toggle,
-        [data-bs-theme="dark"] .nav-item .nav-link.active.dropdown-toggle {
-            color: var(--accent-color) !important;
-        }
-
-        /* ... existing styles ... */
-        /* Override styles for dropdown toggle in active/shown state */
-        .show>.nav-link,
-        .show>.nav-link.active,
-        .show>.nav-link.dropdown-toggle {
-            color: var(--accent-color) !important;
-            background: var(--hover-color);
-        }
-
-        [data-bs-theme="light"] .show>.nav-link,
-        [data-bs-theme="light"] .show>.nav-link.active, 
-        [data-bs-theme="light"] .show>.nav-link.dropdown-toggle {
-            color: var(--accent-color) !important;
-        }
-
-        [data-bs-theme="dark"] .show>.nav-link,
-        [data-bs-theme="dark"] .show>.nav-link.active,
-        [data-bs-theme="dark"] .show>.nav-link.dropdown-toggle {
-            color: white !important;
-}
-
-        .custom-file-upload label {
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            border: 1px solid var(--border-color);
+        /* Evaluation results section spacing */
+        .evaluation-table {
+            margin-bottom: 25px;
         }
         
-        .custom-file-upload label:hover {
-            background-color: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-        
-        [data-bs-theme="dark"] .custom-file-upload label {
-            border-color: var(--dark-border);
-            color: var(--dark-text);
-        }
-        
-        [data-bs-theme="dark"] .custom-file-upload label:hover {
-            background-color: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-
-        .card-title {
+        .evaluation-table:last-child {
             margin-bottom: 0;
+        }
+        
+        /* Disabled file upload styling */
+        .custom-file-upload.disabled label {
+            background-color: #e9ecef !important;
+            color: #6c757d !important;
+            cursor: not-allowed !important;
+            opacity: 0.65;
         }
     </style>
 </head>
@@ -1488,6 +1326,9 @@ if($isCentral):
             </div>
             <div class="card-body">
                 <form id="narrativeForm" method="post" enctype="multipart/form-data">
+                    <!-- Add MAX_FILE_SIZE hidden field -->
+                    <input type="hidden" name="MAX_FILE_SIZE" value="67108864"> <!-- 64MB in bytes -->
+                    
                     <div class="row mb-3">
                         <div class="col-md-4 mb-3">
                             <label for="campus" class="form-label">Campus</label>
@@ -1560,8 +1401,112 @@ if($isCentral):
                         </div>
                         
                         <div class="col-md-12 mb-3">
-                            <label for="evaluation" class="form-label">Evaluation Result</label>
-                            <textarea class="form-control" id="evaluation" name="evaluation" rows="3"></textarea>
+                            <label for="evaluation" class="form-label">Evaluation Results</label>
+                            <div class="table-responsive">
+                                <table class="table table-bordered evaluation-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 25%">Scale</th>
+                                            <th scope="col">BatStateU Participants</th>
+                                            <th scope="col">Participants from other Institutions</th>
+                                            <th scope="col" style="width: 15%">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Excellent</th>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="excellent" data-col="batstateu"></td>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="excellent" data-col="others"></td>
+                                            <td><input type="number" class="form-control activity-total" readonly data-row="excellent"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Very Satisfactory</th>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="very" data-col="batstateu"></td>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="very" data-col="others"></td>
+                                            <td><input type="number" class="form-control activity-total" readonly data-row="very"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Satisfactory</th>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="satisfactory" data-col="batstateu"></td>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="satisfactory" data-col="others"></td>
+                                            <td><input type="number" class="form-control activity-total" readonly data-row="satisfactory"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Fair</th>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="fair" data-col="batstateu"></td>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="fair" data-col="others"></td>
+                                            <td><input type="number" class="form-control activity-total" readonly data-row="fair"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Poor</th>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="poor" data-col="batstateu"></td>
+                                            <td><input type="number" class="form-control activity-rating" min="0" data-row="poor" data-col="others"></td>
+                                            <td><input type="number" class="form-control activity-total" readonly data-row="poor"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total</th>
+                                            <td><input type="number" class="form-control activity-col-total" readonly data-col="batstateu"></td>
+                                            <td><input type="number" class="form-control activity-col-total" readonly data-col="others"></td>
+                                            <td><input type="number" class="form-control activity-grand-total" readonly></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <label class="form-label">Number of Beneficiaries who rated The Timeliness of the activity as:</label>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered evaluation-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="width: 25%">Scale</th>
+                                                <th scope="col">BatStateU Participants</th>
+                                                <th scope="col">Participants from other Institutions</th>
+                                                <th scope="col" style="width: 15%">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Excellent</th>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="excellent" data-col="batstateu"></td>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="excellent" data-col="others"></td>
+                                                <td><input type="number" class="form-control timeliness-total" readonly data-row="excellent"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Very Satisfactory</th>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="very" data-col="batstateu"></td>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="very" data-col="others"></td>
+                                                <td><input type="number" class="form-control timeliness-total" readonly data-row="very"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Satisfactory</th>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="satisfactory" data-col="batstateu"></td>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="satisfactory" data-col="others"></td>
+                                                <td><input type="number" class="form-control timeliness-total" readonly data-row="satisfactory"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Fair</th>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="fair" data-col="batstateu"></td>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="fair" data-col="others"></td>
+                                                <td><input type="number" class="form-control timeliness-total" readonly data-row="fair"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Poor</th>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="poor" data-col="batstateu"></td>
+                                                <td><input type="number" class="form-control timeliness-rating" min="0" data-row="poor" data-col="others"></td>
+                                                <td><input type="number" class="form-control timeliness-total" readonly data-row="poor"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Total</th>
+                                                <td><input type="number" class="form-control timeliness-col-total" readonly data-col="batstateu"></td>
+                                                <td><input type="number" class="form-control timeliness-col-total" readonly data-col="others"></td>
+                                                <td><input type="number" class="form-control timeliness-grand-total" readonly></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <input type="hidden" id="evaluation" name="evaluation">
                         </div>
                         
                         <div class="col-md-12 mb-3">
@@ -1582,6 +1527,14 @@ if($isCentral):
                                         <label for="photoUpload" class="btn btn-outline-primary w-100 py-2">
                                             <i class="fas fa-cloud-upload-alt me-2"></i> Upload Images
                                         </label>
+                                        <div class="d-flex gap-2 mt-2">
+                                            <button type="button" id="newUploadBatchBtn" class="btn btn-outline-secondary flex-grow-1">
+                                                <i class="fas fa-sync me-2"></i> New Upload Batch
+                                            </button>
+                                            <button type="button" id="clearUploadsBtn" class="btn btn-outline-danger flex-grow-1">
+                                                <i class="fas fa-trash me-2"></i> Clear All Uploads
+                                            </button>
+                                        </div>
                                     </div>
                                     <div id="photoPreviewContainer" class="row g-2 mt-2"></div>
                                     <div id="upload-status"></div>
@@ -1756,41 +1709,45 @@ if($isCentral):
             });
         }
 
-        // Apply saved theme on page load
+        // Add this to the DOMContentLoaded event
         document.addEventListener('DOMContentLoaded', function() {
+            // Clear any old temporary uploads on page load
+            clearTemporaryUploads();
+            
+            // Apply saved theme on page load
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
             updateThemeIcon(savedTheme);
 
             // Handle dropdown submenu click behavior
-const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu > a');
-dropdownSubmenus.forEach(submenu => {
-    submenu.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Close other open submenus
-        const otherSubmenus = document.querySelectorAll('.dropdown-submenu.show');
-        otherSubmenus.forEach(menu => {
-            if (menu !== this.parentElement) {
-                menu.classList.remove('show');
-            }
-        });
-        
-        // Toggle current submenu
-        this.parentElement.classList.toggle('show');
-    });
-});
+            const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu > a');
+            dropdownSubmenus.forEach(submenu => {
+                submenu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Close other open submenus
+                    const otherSubmenus = document.querySelectorAll('.dropdown-submenu.show');
+                    otherSubmenus.forEach(menu => {
+                        if (menu !== this.parentElement) {
+                            menu.classList.remove('show');
+                        }
+                    });
+                    
+                    // Toggle current submenu
+                    this.parentElement.classList.toggle('show');
+                });
+            });
 
-// Close submenus when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.dropdown-submenu')) {
-        const openSubmenus = document.querySelectorAll('.dropdown-submenu.show');
-        openSubmenus.forEach(menu => {
-            menu.classList.remove('show');
-        });
-    }
-});
+            // Close submenus when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown-submenu')) {
+                    const openSubmenus = document.querySelectorAll('.dropdown-submenu.show');
+                    openSubmenus.forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+                }
+            });
 
             // Initialize photo upload previews
             setupPhotoUploads();
@@ -1798,6 +1755,9 @@ document.addEventListener('click', function(e) {
             // Initialize Narrative CRUD operations with dropdown options first
             loadDropdownOptions();
             initializeNarrativeCRUD();
+            
+            // Initialize evaluation table calculations
+            setupEvaluationTableCalculations();
         });
 
         // Setup photo upload previews
@@ -1808,121 +1768,359 @@ document.addEventListener('click', function(e) {
                 photoInput.addEventListener('change', function(e) {
                     // Auto-upload images immediately when selected
                     if (this.files && this.files.length > 0) {
-                        uploadImages(this.files);
+                        uploadImages(this.files, false); // Don't clear previous uploads by default
                     }
+                });
+            }
+            
+            // Add event listener to the new upload batch button
+            const newUploadBatchBtn = document.getElementById('newUploadBatchBtn');
+            if (newUploadBatchBtn) {
+                newUploadBatchBtn.addEventListener('click', function() {
+                    // Ask for confirmation
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Clear Existing Uploads?',
+                        text: 'This will clear all existing uploaded images. Continue?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, clear them',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Clear temporary uploads and then trigger the file input dialog
+                            clearTemporaryUploads();
+                            
+                            // After clearing, trigger the file input
+                            setTimeout(() => {
+                                photoInput.click();
+                            }, 500);
+                        }
+                    });
+                });
+            }
+            
+            // Add event listener to the clear uploads button
+            const clearUploadsBtn = document.getElementById('clearUploadsBtn');
+            if (clearUploadsBtn) {
+                clearUploadsBtn.addEventListener('click', function() {
+                    // Ask for confirmation
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Clear All Uploads?',
+                        text: 'This will remove all uploaded images. Continue?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, clear them',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Clear temporary uploads
+                            clearTemporaryUploads();
+                        }
+                    });
                 });
             }
         }
         
         // Function to upload images immediately
-        function uploadImages(files) {
-            // First show temporary previews
-            previewImages(files);
+        function uploadImages(files, clearPrevious = false) {
+            // Get the current preview container
+            const previewContainer = document.getElementById('photoPreviewContainer');
             
-            // Get current narrative ID if editing
-            const currentNarrativeId = window.currentNarrativeId || 0;
-            const campus = document.getElementById('campus').value;
-            
-            // Log the upload attempt
-            console.log(`Uploading images for narrative ID: ${currentNarrativeId}, campus: ${campus}`);
-            
-            // Create FormData object
-            const formData = new FormData();
-            
-            // Add all files to FormData
-            for (let i = 0; i < files.length; i++) {
-                formData.append('images[]', files[i]);
-                console.log(`Adding file to upload: ${files[i].name} (${files[i].size} bytes)`);
+            // If clearPrevious is true, clear the preview container
+            if (clearPrevious) {
+                previewContainer.innerHTML = '';
             }
             
-            // Add narrative ID and campus
-            formData.append('narrative_id', currentNarrativeId);
-            formData.append('campus', campus);
+            // Don't clear existing previews immediately - we'll update them after the upload
+            // Instead, just track the temp previews we're adding now
+            const tempPreviews = [];
             
-            // Show loading state
-            const previewContainer = document.getElementById('photoPreviewContainer');
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'col-12 text-center loading-indicator';
-            loadingDiv.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Uploading images...</p>';
-            previewContainer.appendChild(loadingDiv);
+            // Debug log
+            console.log(`Starting upload of ${files.length} files${clearPrevious ? ' (clearing previous uploads)' : ''}`);
             
-            // Send AJAX request
-            $.ajax({
-                url: 'image_upload_handler.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(response) {
-                    // Remove loading indicator
-                    const indicator = document.querySelector('.loading-indicator');
-                    if (indicator) indicator.remove();
-                    
-                    console.log('Image upload response:', response);
-                    
-                    if (response.success) {
-                        // Update the preview container with the confirmed uploaded images
-                        previewUploadedImages(response.images);
+            // Validate files before attempting upload
+            let validFiles = [];
+            let errorMessages = [];
+            const maxFileSize = 64 * 1024 * 1024; // 64MB in bytes
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                console.log(`Validating file ${i+1}/${files.length}: ${file.name} (${file.type}, ${(file.size / 1024 / 1024).toFixed(2)} MB)`);
+                
+                // Check file size
+                if (file.size > maxFileSize) {
+                    errorMessages.push(`File too large: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB). Maximum size is 64MB.`);
+                    continue;
+                }
+                
+                // Check file type
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+                if (!allowedTypes.includes(file.type)) {
+                    errorMessages.push(`Invalid file type: ${file.name}. Allowed types are JPEG, PNG, and GIF.`);
+                    continue;
+                }
+                
+                // If all checks pass, add to valid files
+                validFiles.push(file);
+            }
+            
+            console.log(`Validation complete: ${validFiles.length} valid files, ${errorMessages.length} errors`);
+            
+            // If we have error messages, show them
+            if (errorMessages.length > 0) {
+                let errorHtml = 'The following issues were found:<ul class="text-start">';
+                errorMessages.forEach(msg => {
+                    errorHtml += `<li>${msg}</li>`;
+                });
+                errorHtml += '</ul>';
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File Validation Error',
+                    html: errorHtml,
+                    position: 'center',
+                    showConfirmButton: true
+                });
+                
+                // If we still have valid files, ask if user wants to proceed with them
+                if (validFiles.length > 0) {
+                    Swal.fire({
+                        icon: 'question',
+                        title: 'Continue with valid files?',
+                        html: `${errorMessages.length} file(s) cannot be uploaded. Do you want to continue with the ${validFiles.length} valid file(s)?`,
+                        showCancelButton: true,
+                        confirmButtonText: 'Continue',
+                        cancelButtonText: 'Cancel',
+                        position: 'center'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // User wants to continue with valid files
+                            proceedWithUpload(validFiles, clearPrevious);
+                        } else {
+                            // User cancels the upload
+                            console.log('Upload canceled by user');
+                        }
+                    });
+                }
+                
+                // If no valid files, just return
+                if (validFiles.length === 0) {
+                    return;
+                }
+            } else {
+                // All files are valid, proceed with upload
+                proceedWithUpload(files, clearPrevious);
+            }
+            
+            function proceedWithUpload(filesToUpload, clearPrevious) {
+                // Show temporary previews for these new files only
+                const tempPreviews = previewNewImages(filesToUpload);
+                
+                // Get current narrative ID if editing
+                const currentNarrativeId = window.currentNarrativeId || 0;
+                const campus = document.getElementById('campus').value;
+                
+                // Log the upload attempt
+                console.log(`Uploading ${filesToUpload.length} images for narrative ID: ${currentNarrativeId}, campus: ${campus}`);
+                
+                // Create FormData object
+                const formData = new FormData();
+                
+                // Add all files to FormData
+                for (let i = 0; i < filesToUpload.length; i++) {
+                    formData.append('images[]', filesToUpload[i]);
+                    console.log(`Adding file to upload: ${filesToUpload[i].name} (${filesToUpload[i].size} bytes)`);
+                }
+                
+                // Add narrative ID and campus
+                formData.append('narrative_id', currentNarrativeId);
+                formData.append('campus', campus);
+                
+                // Add clear_previous flag if needed
+                if (clearPrevious) {
+                    formData.append('clear_previous', 'true');
+                }
+                
+                // Show loading state
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'col-12 text-center loading-indicator';
+                loadingDiv.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Uploading images...</p>';
+                previewContainer.appendChild(loadingDiv);
+                
+                // Debug the form data before sending
+                for (const pair of formData.entries()) {
+                    console.log(`FormData: ${pair[0]}, ${typeof pair[1] === 'object' ? pair[1].name : pair[1]}`);
+                }
+                
+                // Send AJAX request
+                $.ajax({
+                    url: 'image_upload_handler.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(response) {
+                        // Remove loading indicator
+                        const indicator = document.querySelector('.loading-indicator');
+                        if (indicator) indicator.remove();
                         
-                        // Store the narrative ID if provided by server (for new narratives)
-                        if (response.narrative_id) {
-                            window.currentNarrativeId = response.narrative_id;
-                            console.log(`Updated currentNarrativeId to: ${response.narrative_id}`);
+                        console.log('Image upload response:', response);
+                        
+                        if (response.success) {
+                            // Remove temporary previews
+                            tempPreviews.forEach(el => el.remove());
+                            
+                            // Update the preview container with ALL confirmed uploaded images
+                            previewUploadedImages(response.images);
+                            
+                            // Store the narrative ID if provided by server (for new narratives)
+                            if (response.narrative_id) {
+                                window.currentNarrativeId = response.narrative_id;
+                                console.log(`Updated currentNarrativeId to: ${response.narrative_id}`);
+                            }
+                            
+                            // Store the uploaded image paths to prevent duplicates on refresh
+                            window.uploadedImagePaths = response.images || [];
+                            
+                            // Clear the file input
+                            document.getElementById('photoUpload').value = '';
+                            
+                            // Show success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: `Successfully uploaded ${filesToUpload.length} image(s)! Total: ${response.image_count}`,
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            
+                            // If there were warnings, show those too
+                            if (response.warnings && response.warnings.length > 0) {
+                                setTimeout(() => {
+                                    let warningMessage = 'Some issues occurred:';
+                                    warningMessage += '<ul class="text-start">';
+                                    response.warnings.forEach(warning => {
+                                        warningMessage += `<li>${warning}</li>`;
+                                    });
+                                    warningMessage += '</ul>';
+                                    
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Partial Success',
+                                        html: warningMessage,
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 5000
+                                    });
+                                }, 1000);
+                            }
+                        } else {
+                            // Remove temporary previews on error
+                            tempPreviews.forEach(el => el.remove());
+                            
+                            // Get any existing images to redisplay them
+                            if (response.existing_images && Array.isArray(response.existing_images) && response.existing_images.length > 0) {
+                                previewUploadedImages(response.existing_images);
+                                console.log('Displaying existing images after failed upload:', response.existing_images);
+                            }
+                            
+                            // Show error message
+                            let errorMessage = response.message || 'Failed to upload images';
+                            
+                            // If there are specific errors for files, display those too
+                            if (response.errors && response.errors.length > 0) {
+                                errorMessage += '<br><ul class="text-start">';
+                                response.errors.forEach(err => {
+                                    errorMessage += `<li>${err}</li>`;
+                                });
+                                errorMessage += '</ul>';
+                            }
+                            
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                html: errorMessage,
+                                position: 'center',
+                                showConfirmButton: true,
+                                timer: 7000
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Remove loading indicator
+                        const indicator = document.querySelector('.loading-indicator');
+                        if (indicator) indicator.remove();
+                        
+                        // Clear all temporary previews on error
+                        previewContainer.innerHTML = '';
+                        
+                        console.error('AJAX Error:', status + ' - ' + error);
+                        console.log('Response Text:', xhr.responseText);
+                        
+                        // Parse response to extract error information and existing images
+                        let errorMessage = 'Failed to upload images. Server error occurred.';
+                        let existingImages = [];
+                        
+                        try {
+                            // Check if we have a PHP error message (usually non-JSON responses)
+                            if (xhr.responseText.includes('Fatal error') || xhr.responseText.includes('<br />')) {
+                                // Extract the error message from PHP error output
+                                const errorMatch = xhr.responseText.match(/Fatal error: (.*?) in/);
+                                if (errorMatch && errorMatch[1]) {
+                                    errorMessage = 'PHP Error: ' + errorMatch[1];
+                                } else {
+                                    errorMessage = 'PHP Error: Check server logs for details';
+                                }
+                            } else {
+                                // Try to parse as JSON
+                                const response = JSON.parse(xhr.responseText);
+                                if (response) {
+                                    if (response.message) {
+                                        errorMessage = response.message;
+                                        
+                                        // If there are specific errors for files, display those too
+                                        if (response.errors && response.errors.length > 0) {
+                                            errorMessage += '<br><ul class="text-start">';
+                                            response.errors.forEach(err => {
+                                                errorMessage += `<li>${err}</li>`;
+                                            });
+                                            errorMessage += '</ul>';
+                                        }
+                                    }
+                                    
+                                    // Get existing images to redisplay them
+                                    if (response.existing_images && Array.isArray(response.existing_images)) {
+                                        existingImages = response.existing_images;
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            // If JSON parsing fails, use the default message
+                            console.log('Could not parse error response as JSON:', e);
                         }
                         
-                        // Clear the file input
-                        document.getElementById('photoUpload').value = '';
-                        
-                        // Show success message
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'Images uploaded successfully!',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                        
-                        // Verify the photo paths were stored correctly
-                        if (currentNarrativeId > 0) {
-                            // Make a verification request to check the photo_path
-                            verifyPhotoPathStorage(currentNarrativeId);
-                        }
-                    } else {
                         // Show error message
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: response.message || 'Failed to upload images',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 5000
+                            title: 'Upload Failed',
+                            html: errorMessage,
+                            position: 'center', // Changed from toast for more visibility
+                            showConfirmButton: true,
+                            timer: 10000
                         });
+                        
+                        // Re-display existing images if available
+                        if (existingImages.length > 0) {
+                            previewUploadedImages(existingImages);
+                            console.log('Restored display of existing images:', existingImages);
+                        }
                     }
-                },
-                error: function(xhr, status, error) {
-                    // Remove loading indicator
-                    const indicator = document.querySelector('.loading-indicator');
-                    if (indicator) indicator.remove();
-                    
-                    console.error('Upload error:', error);
-                    console.log('Response text:', xhr.responseText);
-                    
-                    // Show error message
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Server Error',
-                        text: 'Failed to upload images. Server error occurred.',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 5000
-                    });
-                }
-            });
+                });
+            }
         }
         
         // Function to verify the photo_path was stored correctly
@@ -1963,13 +2161,10 @@ document.addEventListener('click', function(e) {
             });
         }
         
-        // Function to preview images temporarily before upload completes
-        function previewImages(files) {
+        // Function to preview new images temporarily before upload completes, without clearing existing ones
+        function previewNewImages(files) {
             const previewContainer = document.getElementById('photoPreviewContainer');
-            
-            // Clear existing temporary previews
-            const tempPreviews = previewContainer.querySelectorAll('.temp-preview');
-            tempPreviews.forEach(el => el.remove());
+            const tempPreviews = [];
             
             // Check if there are files selected
             if (files && files.length > 0) {
@@ -1984,7 +2179,8 @@ document.addEventListener('click', function(e) {
                     reader.onload = function(e) {
                         // Create preview container
                         const previewDiv = document.createElement('div');
-                        previewDiv.className = 'col-md-2 mb-2 temp-preview';
+                        previewDiv.className = 'col-4 col-sm-3 col-md-2 mb-2 temp-preview';
+                        tempPreviews.push(previewDiv);
                         
                         // Create image element
                         const img = document.createElement('img');
@@ -2012,27 +2208,48 @@ document.addEventListener('click', function(e) {
                     reader.readAsDataURL(file);
                 }
             }
+            
+            return tempPreviews;
+        }
+        
+        // Original function for backwards compatibility, now just clears and calls the new function
+        function previewImages(files) {
+            const previewContainer = document.getElementById('photoPreviewContainer');
+            
+            // Clear existing temporary previews
+            const existingTempPreviews = previewContainer.querySelectorAll('.temp-preview');
+            existingTempPreviews.forEach(el => el.remove());
+            
+            // Use the new function to preview images
+            return previewNewImages(files);
         }
         
         // Function to display confirmed uploaded images
         function previewUploadedImages(imagePaths) {
             const previewContainer = document.getElementById('photoPreviewContainer');
             
-            // Clear existing temporary previews
-            const tempPreviews = previewContainer.querySelectorAll('.temp-preview');
-            tempPreviews.forEach(el => el.remove());
+            // Clear existing previews
+            previewContainer.innerHTML = '';
             
             // Track images we've already displayed to avoid duplicates
             const displayedPaths = new Set();
             
+            // Log the received image paths for debugging
+            console.log("Received image paths:", imagePaths);
+            
             // Add each confirmed image
             if (Array.isArray(imagePaths) && imagePaths.length > 0) {
-                // Clear existing permanent previews too when replacing with new set
-                previewContainer.innerHTML = '';
+                // IMPORTANT: Limit to 6 most recent images if we have more than 6
+                let pathsToShow = imagePaths;
+                if (imagePaths.length > 6) {
+                    // Take the 6 most recent uploads (assuming they're at the end of the array)
+                    pathsToShow = imagePaths.slice(-6);
+                    console.log("Too many images - limiting to most recent 6:", pathsToShow);
+                }
                 
                 // Display up to 6 images
-                for (let i = 0; i < Math.min(imagePaths.length, 6); i++) {
-                    const path = imagePaths[i];
+                for (let i = 0; i < pathsToShow.length; i++) {
+                    const path = pathsToShow[i];
                     
                     // Skip if we've already displayed this image
                     if (displayedPaths.has(path)) {
@@ -2045,14 +2262,27 @@ document.addEventListener('click', function(e) {
                     
                     // Create preview container
                     const previewDiv = document.createElement('div');
-                    previewDiv.className = 'col-md-2 mb-2';
+                    previewDiv.className = 'col-4 col-sm-3 col-md-2 mb-2';
                     previewDiv.setAttribute('data-path', path);
                     
-                    // Get the display path (add photos/ if it's just a filename)
+                    // Get the display path (ensure proper path handling)
                     let displayPath = path;
+                    
+                    // Fix path handling - check if path already has proper structure
                     if (!path.includes('/') && !path.includes('\\')) {
-                        displayPath = 'photos/' + path;
+                        // Simple filename, add photos/ prefix
+                        displayPath = '../photos/' + path;
+                    } else if (path.includes('narrative_')) {
+                        // If it contains narrative_ prefix and already has photos/ prefix, don't add another photos/
+                        if (path.startsWith('photos/')) {
+                            displayPath = '../' + path;
+                        } else {
+                            displayPath = '../photos/' + path.replace('photos/', '');
+                        }
                     }
+                    
+                    console.log("Image path:", path);
+                    console.log("Display path:", displayPath);
                     
                     // Create image element
                     const img = document.createElement('img');
@@ -2061,6 +2291,22 @@ document.addEventListener('click', function(e) {
                     img.style.height = '100px';
                     img.style.width = '100%';
                     img.style.objectFit = 'cover';
+                    
+                    // Add error handler for images
+                    img.onerror = function() {
+                        console.error("Failed to load image:", displayPath);
+                        // Try alternate paths as fallback
+                        const altPath = path.includes('/') ? path.split('/').pop() : path;
+                        console.log("Trying alternate path:", "../photos/" + altPath);
+                        img.src = '../photos/' + altPath;
+                        
+                        // If still fails, show placeholder
+                        img.onerror = function() {
+                            console.error("All fallback paths failed, using placeholder");
+                            img.src = 'https://via.placeholder.com/100x100?text=Image+Error';
+                            img.style.opacity = '0.5';
+                        };
+                    };
                     
                     // Create remove button
                     const removeBtn = document.createElement('button');
@@ -2082,6 +2328,17 @@ document.addEventListener('click', function(e) {
                     previewDiv.appendChild(removeBtn);
                     previewContainer.appendChild(previewDiv);
                 }
+            }
+            
+            // Log how many images were displayed
+            console.log(`Displayed ${displayedPaths.size} images out of ${imagePaths ? imagePaths.length : 0} paths received`);
+            
+            // Show warning if there are more images than we can display
+            if (imagePaths && imagePaths.length > 6) {
+                const warningDiv = document.createElement('div');
+                warningDiv.className = 'col-12 mt-2 alert alert-warning';
+                warningDiv.innerHTML = `<small>Note: Only showing the 6 most recent images. ${imagePaths.length - 6} older images not displayed. Use "New Upload Batch" to start fresh.</small>`;
+                previewContainer.appendChild(warningDiv);
             }
         }
         
@@ -2345,67 +2602,65 @@ document.addEventListener('click', function(e) {
                 
                 // Show loading message
                 const saveStatus = document.getElementById('save-status');
-                saveStatus.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Loading narratives...';
                 
-                // Get filter parameters
-                let campusFilter = '';
-                if (!isCentral) {
-                    campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
-                    console.log("Non-central user editing narratives for campus:", campusFilter);
-                }
                 
-                // Fetch the latest data before showing the modal
-                $.ajax({
-                    url: 'narrative_handler.php',
-                    type: 'POST',
-                    data: { 
-                        action: 'read',
-                        campus: campusFilter
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        // Clear loading message
-                        saveStatus.innerHTML = '';
-                        
-                        if (response.success) {
-                            narrativeData = response.data || [];
-                            console.log("Loaded", narrativeData.length, "narratives for editing");
-                            
-                            if (narrativeData.length === 0) {
-                                Swal.fire({
-                                    icon: 'info',
-                                    title: 'No Records',
-                                    text: 'No narrative entries found for ' + (campusFilter || 'any campus')
-                                });
-                                return;
-                            }
-                            
-                            // Now show the list with the updated data for editing
-                            showNarrativesActionList('edit');
-                        } else {
-                            saveStatus.innerHTML = '<span class="text-danger">Error loading narratives</span>';
-                            setTimeout(() => { saveStatus.innerHTML = ''; }, 3000);
-                            
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message || 'Failed to load narratives'
+                if (isCentral) {
+                    // For central users, show a campus filter dropdown
+                    Swal.fire({
+                        title: 'Select Campus',
+                        html: `
+                            <div class="form-group">
+                                <select id="campusFilter" class="form-select" style="background-color: #404040; color: #ffffff; border-color: #6c757d;">
+                                    <option value="">All Campuses</option>
+                                </select>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Edit Narratives',
+                        cancelButtonText: 'Cancel',
+                        background: '#2d2d2d',
+                        color: '#ffffff',
+                        confirmButtonColor: '#7b1fa2',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            // Populate campus dropdown
+                            $.ajax({
+                                url: 'narrative_handler.php',
+                                type: 'POST',
+                                data: { action: 'get_campuses' },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.success) {
+                                        const campusSelect = document.getElementById('campusFilter');
+                                        
+                                        // Add new options
+                                        response.data.forEach(campus => {
+                                            const option = document.createElement('option');
+                                            option.value = campus;
+                                            option.textContent = campus;
+                                            campusSelect.appendChild(option);
+                                        });
+                                    }
+                                }
                             });
                         }
-                    },
-                    error: function(xhr) {
-                        saveStatus.innerHTML = '<span class="text-danger">Server error</span>';
-                        setTimeout(() => { saveStatus.innerHTML = ''; }, 3000);
-                        
-                        console.error("AJAX Error:", xhr.responseText);
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Server Error',
-                            text: 'Failed to connect to the server. Please try again later.'
-                        });
-                    }
-                });
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const campusFilter = document.getElementById('campusFilter').value;
+                            // Load narratives with the selected campus filter
+                            loadNarrativesAndShowList(campusFilter, 'edit');
+                        } else {
+                            saveStatus.innerHTML = '';
+                        }
+                    });
+                } else {
+                    // Get filter parameters for non-central users
+                    let campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
+                    console.log("Non-central user editing narratives for campus:", campusFilter);
+                    
+                    // Load narratives with the user's campus filter
+                    loadNarrativesAndShowList(campusFilter, 'edit');
+                }
             });
             
             deleteBtn.addEventListener('click', function() {
@@ -2430,80 +2685,132 @@ document.addEventListener('click', function(e) {
                 
                 // Show loading message
                 const saveStatus = document.getElementById('save-status');
-                saveStatus.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Loading narratives...';
                 
-                // Get filter parameters
-                let campusFilter = '';
-                if (!isCentral) {
-                    campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
-                    console.log("Non-central user deleting narratives for campus:", campusFilter);
-                }
-                
-                // Fetch the latest data before showing the modal
-                $.ajax({
-                    url: 'narrative_handler.php',
-                    type: 'POST',
-                    data: { 
-                        action: 'read',
-                        campus: campusFilter
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        // Clear loading message
-                        saveStatus.innerHTML = '';
-                        
-                        if (response.success) {
-                            narrativeData = response.data || [];
-                            console.log("Loaded", narrativeData.length, "narratives for deletion");
-                            
-                            if (narrativeData.length === 0) {
-                                Swal.fire({
-                                    icon: 'info',
-                                    title: 'No Records',
-                                    text: 'No narrative entries found for ' + (campusFilter || 'any campus')
-                                });
-                                return;
-                            }
-                            
-                            // Now show the list with the updated data for deletion
-                            showNarrativesActionList('delete');
-                        } else {
-                            saveStatus.innerHTML = '<span class="text-danger">Error loading narratives</span>';
-                            setTimeout(() => { saveStatus.innerHTML = ''; }, 3000);
-                            
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message || 'Failed to load narratives'
+                if (isCentral) {
+                    // For central users, show a campus filter dropdown
+                    Swal.fire({
+                        title: 'Select Campus',
+                        html: `
+                            <div class="form-group">
+                                <select id="campusFilter" class="form-select" style="background-color: #404040; color: #ffffff; border-color: #6c757d;">
+                                    <option value="">All Campuses</option>
+                                </select>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Delete Narratives',
+                        cancelButtonText: 'Cancel',
+                        background: '#2d2d2d',
+                        color: '#ffffff',
+                        confirmButtonColor: '#7b1fa2',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            // Populate campus dropdown
+                            $.ajax({
+                                url: 'narrative_handler.php',
+                                type: 'POST',
+                                data: { action: 'get_campuses' },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.success) {
+                                        const campusSelect = document.getElementById('campusFilter');
+                                        
+                                        // Add new options
+                                        response.data.forEach(campus => {
+                                            const option = document.createElement('option');
+                                            option.value = campus;
+                                            option.textContent = campus;
+                                            campusSelect.appendChild(option);
+                                        });
+                                    }
+                                }
                             });
                         }
-                    },
-                    error: function(xhr) {
-                        saveStatus.innerHTML = '<span class="text-danger">Server error</span>';
-                        setTimeout(() => { saveStatus.innerHTML = ''; }, 3000);
-                        
-                        console.error("AJAX Error:", xhr.responseText);
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Server Error',
-                            text: 'Failed to connect to the server. Please try again later.'
-                        });
-                    }
-                });
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const campusFilter = document.getElementById('campusFilter').value;
+                            // Load narratives with the selected campus filter
+                            loadNarrativesAndShowList(campusFilter, 'delete');
+                        } else {
+                            saveStatus.innerHTML = '';
+                        }
+                    });
+                } else {
+                    // Get filter parameters for non-central users
+                    let campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
+                    console.log("Non-central user deleting narratives for campus:", campusFilter);
+                    
+                    // Load narratives with the user's campus filter
+                    loadNarrativesAndShowList(campusFilter, 'delete');
+                }
             });
             
             viewBtn.addEventListener('click', function() {
                 // Show loading message
                 const saveStatus = document.getElementById('save-status');
-                saveStatus.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Loading narratives...';
                 
-                // Get filter parameters
-                let campusFilter = '';
-                if (!isCentral) {
-                    campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
+                if (isCentral) {
+                    // For central users, show a campus filter dropdown
+                    Swal.fire({
+                        title: 'Select Campus',
+                        html: `
+                            <div class="form-group">
+                                <select id="campusFilter" class="form-select" style="background-color: #404040; color: #ffffff; border-color: #6c757d;">
+                                    <option value="">All Campuses</option>
+                                </select>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: 'View Narratives',
+                        cancelButtonText: 'Cancel',
+                        background: '#2d2d2d',
+                        color: '#ffffff',
+                        confirmButtonColor: '#7b1fa2',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            // Populate campus dropdown
+                            $.ajax({
+                                url: 'narrative_handler.php',
+                                type: 'POST',
+                                data: { action: 'get_campuses' },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.success) {
+                                        const campusSelect = document.getElementById('campusFilter');
+                                        
+                                        // Add new options
+                                        response.data.forEach(campus => {
+                                            const option = document.createElement('option');
+                                            option.value = campus;
+                                            option.textContent = campus;
+                                            campusSelect.appendChild(option);
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const campusFilter = document.getElementById('campusFilter').value;
+                            // Load narratives with the selected campus filter
+                            loadNarrativesAndShowList(campusFilter, 'view');
+                        } else {
+                            saveStatus.innerHTML = '';
+                        }
+                    });
+                } else {
+                    // Get filter parameters for non-central users
+                    let campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
                     console.log("Non-central user viewing narratives for campus:", campusFilter);
+                    
+                    // Load narratives with the user's campus filter
+                    loadNarrativesAndShowList(campusFilter, 'view');
                 }
+            });
+            
+            // Function to load narratives and show the list with the specified action
+            function loadNarrativesAndShowList(campusFilter, action) {
+                const saveStatus = document.getElementById('save-status');
                 
                 // Fetch the latest data before showing the modal
                 $.ajax({
@@ -2532,9 +2839,9 @@ document.addEventListener('click', function(e) {
                             }
                             
                             // Now show the list with the updated data for viewing
-                            showNarrativesActionList('view');
+                            showNarrativesActionList(action);
                         } else {
-                            saveStatus.innerHTML = '<span class="text-danger">Error loading narratives</span>';
+                            
                             setTimeout(() => { saveStatus.innerHTML = ''; }, 3000);
                             
                             // Check if table doesn't exist
@@ -2567,16 +2874,20 @@ document.addEventListener('click', function(e) {
                         });
                     }
                 });
-            });
+            }
             
             // Function to handle form submission (create or update)
             function handleFormSubmit(e) {
+                const form = document.getElementById('narrativeForm');
                 if (!form.checkValidity()) {
                     form.reportValidity();
                     return;
                 }
                 
                 // For Central users, validate that campus is selected
+                const isCentral = document.getElementById('isCentral') ? 
+                    document.getElementById('isCentral').value === '1' : false;
+                
                 if (isCentral) {
                     const campusSelect = document.getElementById('campus');
                     if (!campusSelect.value) {
@@ -2594,11 +2905,19 @@ document.addEventListener('click', function(e) {
                     }
                 }
                 
+                // Make sure evaluation data is updated before submission
+                updateEvaluationData();
+                
                 // Show saving spinner
+                const saveSpinner = document.getElementById('save-spinner');
                 saveSpinner.style.display = 'inline-block';
                 
                 // Create FormData object from the form
                 const formData = new FormData(form);
+                
+                // Get current editing state
+                const isEditing = window.isEditing || false;
+                const currentNarrativeId = window.currentNarrativeId || 0;
                 
                 // Add action based on whether we're editing or adding
                 formData.append('action', isEditing ? 'update' : 'create');
@@ -2607,6 +2926,9 @@ document.addEventListener('click', function(e) {
                 if (!isCentral && document.getElementById('campus_override')) {
                     formData.append('campus', document.getElementById('campus_override').value);
                 }
+                
+                // Debug log the form data before submission
+                console.log('Submitting form with evaluation data:', document.getElementById('evaluation').value);
                 
                 // Send AJAX request
                 $.ajax({
@@ -2618,14 +2940,13 @@ document.addEventListener('click', function(e) {
                     dataType: 'json',
                     success: function(response) {
                         // Hide spinner
-                        saveSpinner.style.display = 'none';
+                        document.getElementById('save-spinner').style.display = 'none';
                         
                         if (response.success) {
                             // Update currentNarrativeId
-                            currentNarrativeId = response.narrative_id || null;
-                            if (currentNarrativeId) {
-                                narrativeIdField.value = currentNarrativeId;
-                                window.currentNarrativeId = currentNarrativeId;
+                            window.currentNarrativeId = response.narrative_id || null;
+                            if (window.currentNarrativeId) {
+                                document.getElementById('narrative_id').value = window.currentNarrativeId;
                             }
                             
                             // Show success message
@@ -2642,55 +2963,29 @@ document.addEventListener('click', function(e) {
                             // If we were editing, exit edit mode but keep buttons enabled
                             if (isEditing) {
                                 // Reset editing state
-                                isEditing = false;
+                                window.isEditing = false;
+                                const editBtn = document.getElementById('editBtn');
                                 editBtn.innerHTML = '<i class="fas fa-edit"></i>';
                                 editBtn.classList.remove('editing');
                                 editBtn.title = 'Edit narrative';
                                 
                                 // Reset add button
+                                const addBtn = document.getElementById('addBtn');
                                 addBtn.innerHTML = '<i class="fas fa-plus"></i>';
                                 addBtn.title = 'Add new narrative';
                                 addBtn.classList.remove('btn-update');
                                 
                                 // Make sure delete button is re-enabled
+                                const deleteBtn = document.getElementById('deleteBtn');
                                 deleteBtn.classList.remove('btn-disabled');
                                 deleteBtn.title = 'Delete narrative';
                                 
-                                // Clear form fields but keep the form ready for new data
-                                form.reset();
-                                
-                                // For non-central users, restore their campus
-                                if (!isCentral && document.getElementById('campus_override')) {
-                                    const campusValue = document.getElementById('campus_override').value;
-                                    document.getElementById('campus').value = campusValue;
-                                    
-                                    // Reload years based on campus
-                                    loadYearsForCampus(campusValue);
-                                }
-                                
-                                // Clear photo previews
-                                document.getElementById('photoPreviewContainer').innerHTML = '';
+                                // Clear form fields completely, including images
+                                resetForm();
                             } else {
-                                // For new entries, just reset the form
-                                form.reset();
-                                
-                                // For non-central users, restore their campus
-                                if (!isCentral && document.getElementById('campus_override')) {
-                                    const campusValue = document.getElementById('campus_override').value;
-                                    document.getElementById('campus').value = campusValue;
-                                    
-                                    // Reload years based on campus
-                                    loadYearsForCampus(campusValue);
-                                }
-                                
-                                // Clear photo previews
-                                document.getElementById('photoPreviewContainer').innerHTML = '';
+                                // For new entries, just reset the form completely
+                                resetForm();
                             }
-                            
-                            // Clear current narrative ID to prepare for new entry
-                            currentNarrativeId = null;
-                            window.currentNarrativeId = null;
-                            narrativeIdField.value = '0';
                             
                             // Reload narratives list
                             loadNarratives();
@@ -2708,19 +3003,42 @@ document.addEventListener('click', function(e) {
                     },
                     error: function(xhr, status, error) {
                         // Hide spinner
-                        saveSpinner.style.display = 'none';
+                        document.getElementById('save-spinner').style.display = 'none';
                         
                         console.error("AJAX Error: " + status + " - " + error);
                         console.log("Response Text: " + xhr.responseText);
                         
+                        // Try to parse the response if it's JSON
+                        let errorMessage = 'Server error while processing your request';
+                        try {
+                            // Check if we have a PHP error message (usually non-JSON responses)
+                            if (xhr.responseText.includes('Fatal error') || xhr.responseText.includes('<br />')) {
+                                // Extract the error message from PHP error output
+                                const errorMatch = xhr.responseText.match(/Fatal error: (.*?) in/);
+                                if (errorMatch && errorMatch[1]) {
+                                    errorMessage = 'PHP Error: ' + errorMatch[1];
+                                } else {
+                                    errorMessage = 'PHP Error: Check server logs for details';
+                                }
+                            } else {
+                                // Try to parse as JSON
+                                const response = JSON.parse(xhr.responseText);
+                                if (response && response.message) {
+                                    errorMessage = response.message;
+                                }
+                            }
+                        } catch (e) {
+                            // If JSON parsing fails, use the default message
+                            console.log('Could not parse error response as JSON');
+                        }
+                        
                         Swal.fire({
                             icon: 'error',
                             title: 'Server Error',
-                            text: 'Server error while processing your request',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 5000
+                            text: errorMessage,
+                            position: 'center', // Changed from toast for better visibility of important errors
+                            showConfirmButton: true,
+                            timer: 10000
                         });
                     }
                 });
@@ -2768,7 +3086,7 @@ document.addEventListener('click', function(e) {
                 deleteBtn.classList.remove('btn-disabled');
                 deleteBtn.title = 'Delete narrative';
                 
-                // Clear form
+                // Clear form and images
                 resetForm();
             }
             
@@ -2810,6 +3128,7 @@ document.addEventListener('click', function(e) {
                         
                         if (response.success) {
                             const narrative = response.data;
+                            console.log("Loaded narrative data:", narrative);
                             
                             // First populate the campus dropdown
                             const campusSelect = document.getElementById('campus');
@@ -2817,7 +3136,7 @@ document.addEventListener('click', function(e) {
                             
                             // Store the narrative ID globally
                             window.currentNarrativeId = narrativeId;
-                            narrativeIdField.value = narrativeId;
+                            document.getElementById('narrative_id').value = narrativeId;
                             
                             // Then load years for this campus
                             loadYearsForCampus(narrative.campus, function() {
@@ -2851,14 +3170,241 @@ document.addEventListener('click', function(e) {
                                     previewContainer.innerHTML = '';
                                     
                                     // Show existing photo previews if available
-                                    const photoArray = narrative.photo_paths || [];
+                                    // Ensure photoArray is an array by converting from string if needed
+                                    let photoArray = [];
+                                    if (typeof narrative.photo_paths === 'string' && narrative.photo_paths) {
+                                        try {
+                                            photoArray = JSON.parse(narrative.photo_paths);
+                                        } catch (e) {
+                                            console.warn('Failed to parse photo_paths as JSON:', e);
+                                            photoArray = [];
+                                        }
+                                    } else if (Array.isArray(narrative.photo_paths)) {
+                                        photoArray = narrative.photo_paths;
+                                    }
+                                    
+                                    // Add the main photo path if it's not already included
                                     if (narrative.photo_path && !photoArray.includes(narrative.photo_path)) {
                                         photoArray.push(narrative.photo_path);
                                     }
                                     
+                                    console.log("Photo paths:", photoArray);
+                                    
                                     if (photoArray.length > 0) {
                                         previewUploadedImages(photoArray);
                                     }
+                                    
+                                    // Process evaluation data
+                                    try {
+                                        if (narrative.evaluation) {
+                                            const evalData = JSON.parse(narrative.evaluation);
+                                            console.log("Evaluation data:", evalData);
+                                            
+                                            // Check for new format (activity and timeliness properties)
+                                            if (evalData.activity) {
+                                                // Handle new format
+                                                
+                                                // Populate activity ratings
+                                                if (evalData.activity["Excellent"]) {
+                                                    document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                        evalData.activity["Excellent"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                                        evalData.activity["Excellent"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.activity["Very Satisfactory"]) {
+                                                    document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                        evalData.activity["Very Satisfactory"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                                        evalData.activity["Very Satisfactory"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.activity["Satisfactory"]) {
+                                                    document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                        evalData.activity["Satisfactory"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                        evalData.activity["Satisfactory"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.activity["Fair"]) {
+                                                    document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                        evalData.activity["Fair"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                                        evalData.activity["Fair"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.activity["Poor"]) {
+                                                    document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                        evalData.activity["Poor"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                                        evalData.activity["Poor"]["Others"] || 0;
+                                                }
+                                                
+                                                // Populate timeliness ratings if available
+                                                if (evalData.timeliness) {
+                                                    if (evalData.timeliness["Excellent"]) {
+                                                        document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness["Excellent"]["BatStateU"] || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
+                                                            evalData.timeliness["Excellent"]["Others"] || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness["Very Satisfactory"]) {
+                                                        document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness["Very Satisfactory"]["BatStateU"] || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
+                                                            evalData.timeliness["Very Satisfactory"]["Others"] || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness["Satisfactory"]) {
+                                                        document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness["Satisfactory"]["BatStateU"] || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                            evalData.timeliness["Satisfactory"]["Others"] || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness["Fair"]) {
+                                                        document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness["Fair"]["BatStateU"] || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
+                                                            evalData.timeliness["Fair"]["Others"] || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness["Poor"]) {
+                                                        document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness["Poor"]["BatStateU"] || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
+                                                            evalData.timeliness["Poor"]["Others"] || 0;
+                                                    }
+                                                }
+                                            } 
+                                            // Handle old format (ratings and timeliness properties)
+                                            else if (evalData.ratings) {
+                                                // Populate activity ratings
+                                                if (evalData.ratings.excellent) {
+                                                    document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                        evalData.ratings.excellent.batstateu || 0;
+                                                    document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                                        evalData.ratings.excellent.others || 0;
+                                                }
+                                                
+                                                if (evalData.ratings.very_satisfactory) {
+                                                    document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                        evalData.ratings.very_satisfactory.batstateu || 0;
+                                                    document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                                        evalData.ratings.very_satisfactory.others || 0;
+                                                }
+                                                
+                                                if (evalData.ratings.satisfactory) {
+                                                    document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                        evalData.ratings.satisfactory.batstateu || 0;
+                                                    document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                        evalData.ratings.satisfactory.others || 0;
+                                                }
+                                                
+                                                if (evalData.ratings.fair) {
+                                                    document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                        evalData.ratings.fair.batstateu || 0;
+                                                    document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                                        evalData.ratings.fair.others || 0;
+                                                }
+                                                
+                                                if (evalData.ratings.poor) {
+                                                    document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                        evalData.ratings.poor.batstateu || 0;
+                                                    document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                                        evalData.ratings.poor.others || 0;
+                                                }
+                                                
+                                                // Populate timeliness ratings if available
+                                                if (evalData.timeliness) {
+                                                    if (evalData.timeliness.excellent) {
+                                                        document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness.excellent.batstateu || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
+                                                            evalData.timeliness.excellent.others || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness.very_satisfactory) {
+                                                        document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness.very_satisfactory.batstateu || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
+                                                            evalData.timeliness.very_satisfactory.others || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness.satisfactory) {
+                                                        document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness.satisfactory.batstateu || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                            evalData.timeliness.satisfactory.others || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness.fair) {
+                                                        document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness.fair.batstateu || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
+                                                            evalData.timeliness.fair.others || 0;
+                                                    }
+                                                    
+                                                    if (evalData.timeliness.poor) {
+                                                        document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                            evalData.timeliness.poor.batstateu || 0;
+                                                        document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
+                                                            evalData.timeliness.poor.others || 0;
+                                                    }
+                                                }
+                                            }
+                                            // Handle direct object format (Excellent, Very Satisfactory, etc.)
+                                            else if (evalData["Excellent"] || evalData["Fair"] || evalData["Poor"] || evalData["Satisfactory"] || evalData["Very Satisfactory"]) {
+                                                // This is the simplest format with just the ratings
+                                                if (evalData["Excellent"]) {
+                                                    document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                        evalData["Excellent"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                                        evalData["Excellent"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData["Very Satisfactory"]) {
+                                                    document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                        evalData["Very Satisfactory"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                                        evalData["Very Satisfactory"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData["Satisfactory"]) {
+                                                    document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                        evalData["Satisfactory"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                        evalData["Satisfactory"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData["Fair"]) {
+                                                    document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                        evalData["Fair"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                                        evalData["Fair"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData["Poor"]) {
+                                                    document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                        evalData["Poor"]["BatStateU"] || 0;
+                                                    document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                                        evalData["Poor"]["Others"] || 0;
+                                                }
+                                            }
+                                            
+                                            // Recalculate totals
+                                            calculateTotals();
+                                            calculateTimelinessTotal();
+                                        }
+                                    } catch (e) {
+                                        console.error("Error parsing evaluation data:", e);
+                                        // If there's an error, just set the raw value to the hidden field
+                                        document.getElementById('evaluation').value = narrative.evaluation || '';
+                                    }
+                                    
+                                    // After populating data, enable photo upload if both year and activity are set
+                                    updatePhotoUploadState();
                                 });
                             });
                         } else {
@@ -3073,6 +3619,7 @@ document.addEventListener('click', function(e) {
                         
                         if (response.success) {
                             const narrative = response.data;
+                            console.log("Viewing narrative details:", narrative);
                             
                             // Update modal content
                             document.getElementById('narrativeDetailsModalLabel').textContent = 'Narrative Details';
@@ -3119,7 +3666,20 @@ document.addEventListener('click', function(e) {
                             `;
                             
                             // Add photos if available
-                            const photoArray = narrative.photo_paths || [];
+                            // Ensure photoArray is an array by converting from string if needed
+                            let photoArray = [];
+                            if (typeof narrative.photo_paths === 'string' && narrative.photo_paths) {
+                                try {
+                                    photoArray = JSON.parse(narrative.photo_paths);
+                                } catch (e) {
+                                    console.warn('Failed to parse photo_paths as JSON:', e);
+                                    photoArray = [];
+                                }
+                            } else if (Array.isArray(narrative.photo_paths)) {
+                                photoArray = narrative.photo_paths;
+                            }
+                            
+                            // Add the main photo path if it's not already included
                             if (narrative.photo_path && !photoArray.includes(narrative.photo_path)) {
                                 photoArray.push(narrative.photo_path);
                             }
@@ -3132,9 +3692,27 @@ document.addEventListener('click', function(e) {
                                 `;
                                 
                                 photoArray.forEach(photo => {
+                                    // Fix image path handling for display
+                                    let displayPath = photo;
+                                    if (!photo.includes('/') && !photo.includes('\\')) {
+                                        displayPath = '../photos/' + photo;
+                                    } else if (photo.includes('narrative_')) {
+                                        // If it contains narrative_ prefix and already has photos/ prefix, don't add another photos/
+                                        if (photo.startsWith('photos/')) {
+                                            displayPath = '../' + photo;
+                                        } else {
+                                            displayPath = '../photos/' + photo.replace('photos/', '');
+                                        }
+                                    }
+                                    
+                                    console.log("View mode - Image path:", photo);
+                                    console.log("View mode - Display path:", displayPath);
+                                    
                                     html += `
                                         <div class="col-md-4 mb-3">
-                                            <img src="${photo}" alt="Photo documentation" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                                            <img src="${displayPath}" alt="Photo documentation" class="img-fluid img-thumbnail" 
+                                                 style="max-height: 200px;" onerror="this.onerror=null;this.src='../photos/${photo.includes('/') ? photo.split('/').pop() : photo}';
+                                                 if(this.src.includes('undefined')) this.src='https://via.placeholder.com/200x150?text=Image+Not+Found';">
                                         </div>
                                     `;
                                 });
@@ -3351,8 +3929,25 @@ document.addEventListener('click', function(e) {
                 // Keep delete button enabled
                 deleteBtn.classList.remove('btn-disabled');
                 
-                // Clear photo previews
-                document.getElementById('photoPreviewContainer').innerHTML = '';
+                // Clear photo previews completely
+                const previewContainer = document.getElementById('photoPreviewContainer');
+                if (previewContainer) {
+                    previewContainer.innerHTML = '';
+                }
+                
+                // Clear the file input
+                const photoInput = document.getElementById('photoUpload');
+                if (photoInput) {
+                    photoInput.value = '';
+                }
+                
+                // Clear any stored image data or cached paths
+                window.uploadedImagePaths = [];
+                
+                // Clear session storage for uploaded images
+                if (window.sessionStorage) {
+                    sessionStorage.removeItem('uploadedImages');
+                }
                 
                 // For non-central users, restore their campus
                 if (!isCentral && document.getElementById('campus_override')) {
@@ -3384,6 +3979,9 @@ document.addEventListener('click', function(e) {
                 if (saveStatus) {
                     saveStatus.innerHTML = '';
                 }
+                
+                // Update photo upload state (should disable it since year/activity are reset)
+                updatePhotoUploadState();
             }
             
             // Helper function to load activities with a callback
@@ -3669,7 +4267,904 @@ document.addEventListener('click', function(e) {
                     }
                 });
         }
+
+        // Add this function for evaluation table calculations
+        function setupEvaluationTableCalculations() {
+            // Get all rating inputs
+            const ratingInputs = document.querySelectorAll('.activity-rating');
+            const timelinessInputs = document.querySelectorAll('.timeliness-rating');
+            
+            // Add event listeners to all rating inputs
+            ratingInputs.forEach(input => {
+                input.addEventListener('input', calculateTotals);
+            });
+            
+            // Add event listeners to all timeliness inputs
+            timelinessInputs.forEach(input => {
+                input.addEventListener('input', calculateTimelinessTotal);
+            });
+            
+            // Calculate initial totals
+            calculateTotals();
+            calculateTimelinessTotal();
+        }
+        
+        function calculateTotals() {
+            // Calculate row totals (horizontally)
+            const rows = ['excellent', 'very', 'satisfactory', 'fair', 'poor'];
+            
+            rows.forEach(row => {
+                const batstateuInput = document.querySelector(`.activity-rating[data-row="${row}"][data-col="batstateu"]`);
+                const othersInput = document.querySelector(`.activity-rating[data-row="${row}"][data-col="others"]`);
+                const totalInput = document.querySelector(`.activity-total[data-row="${row}"]`);
+                
+                const batstateuValue = parseInt(batstateuInput.value) || 0;
+                const othersValue = parseInt(othersInput.value) || 0;
+                
+                totalInput.value = batstateuValue + othersValue;
+            });
+            
+            // Calculate column totals (vertically)
+            const cols = ['batstateu', 'others'];
+            
+            cols.forEach(col => {
+                let colTotal = 0;
+                
+                rows.forEach(row => {
+                    const input = document.querySelector(`.activity-rating[data-row="${row}"][data-col="${col}"]`);
+                    colTotal += parseInt(input.value) || 0;
+                });
+                
+                document.querySelector(`.activity-col-total[data-col="${col}"]`).value = colTotal;
+            });
+            
+            // Calculate grand total
+            let grandTotal = 0;
+            document.querySelectorAll('.activity-total').forEach(input => {
+                grandTotal += parseInt(input.value) || 0;
+            });
+            
+            document.querySelector('.activity-grand-total').value = grandTotal;
+            
+            // Update hidden evaluation field with JSON data
+            updateEvaluationData();
+        }
+
+        // Add function to calculate timeliness totals
+        function calculateTimelinessTotal() {
+            // Calculate row totals (horizontally)
+            const rows = ['excellent', 'very', 'satisfactory', 'fair', 'poor'];
+            
+            rows.forEach(row => {
+                const batstateuInput = document.querySelector(`.timeliness-rating[data-row="${row}"][data-col="batstateu"]`);
+                const othersInput = document.querySelector(`.timeliness-rating[data-row="${row}"][data-col="others"]`);
+                const totalInput = document.querySelector(`.timeliness-total[data-row="${row}"]`);
+                
+                const batstateuValue = parseInt(batstateuInput.value) || 0;
+                const othersValue = parseInt(othersInput.value) || 0;
+                
+                totalInput.value = batstateuValue + othersValue;
+            });
+            
+            // Calculate column totals (vertically)
+            const cols = ['batstateu', 'others'];
+            
+            cols.forEach(col => {
+                let colTotal = 0;
+                
+                rows.forEach(row => {
+                    const input = document.querySelector(`.timeliness-rating[data-row="${row}"][data-col="${col}"]`);
+                    colTotal += parseInt(input.value) || 0;
+                });
+                
+                document.querySelector(`.timeliness-col-total[data-col="${col}"]`).value = colTotal;
+            });
+            
+            // Calculate grand total
+            let grandTotal = 0;
+            document.querySelectorAll('.timeliness-total').forEach(input => {
+                grandTotal += parseInt(input.value) || 0;
+            });
+            
+            document.querySelector('.timeliness-grand-total').value = grandTotal;
+            
+            // Update hidden evaluation field with JSON data
+            updateEvaluationData();
+        }
+        
+        // Update function to format evaluation data for submission
+        function updateEvaluationData() {
+            // Activity ratings
+            const activityData = {
+                "Excellent": {
+                    "BatStateU": parseInt(document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value) || 0
+                },
+                "Very Satisfactory": {
+                    "BatStateU": parseInt(document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value) || 0
+                },
+                "Satisfactory": {
+                    "BatStateU": parseInt(document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value) || 0
+                },
+                "Fair": {
+                    "BatStateU": parseInt(document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value) || 0
+                },
+                "Poor": {
+                    "BatStateU": parseInt(document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value) || 0
+                }
+            };
+            
+            // Timeliness ratings
+            const timelinessData = {
+                "Excellent": {
+                    "BatStateU": parseInt(document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value) || 0
+                },
+                "Very Satisfactory": {
+                    "BatStateU": parseInt(document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value) || 0
+                },
+                "Satisfactory": {
+                    "BatStateU": parseInt(document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value) || 0
+                },
+                "Fair": {
+                    "BatStateU": parseInt(document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value) || 0
+                },
+                "Poor": {
+                    "BatStateU": parseInt(document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value) || 0,
+                    "Others": parseInt(document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value) || 0
+                }
+            };
+            
+            // Store activity ratings in a hidden field
+            if (!document.getElementById('activity_ratings')) {
+                const activityField = document.createElement('input');
+                activityField.type = 'hidden';
+                activityField.id = 'activity_ratings';
+                activityField.name = 'activity_ratings';
+                document.getElementById('narrativeForm').appendChild(activityField);
+            }
+            document.getElementById('activity_ratings').value = JSON.stringify(activityData);
+            
+            // Store timeliness ratings in a hidden field
+            if (!document.getElementById('timeliness_ratings')) {
+                const timelinessField = document.createElement('input');
+                timelinessField.type = 'hidden';
+                timelinessField.id = 'timeliness_ratings';
+                timelinessField.name = 'timeliness_ratings';
+                document.getElementById('narrativeForm').appendChild(timelinessField);
+            }
+            document.getElementById('timeliness_ratings').value = JSON.stringify(timelinessData);
+            
+            // For backward compatibility, still keep the combined evaluation field
+            const evalData = {
+                activity: activityData,
+                timeliness: timelinessData
+            };
+            document.getElementById('evaluation').value = JSON.stringify(evalData);
+        }
+        
+        // Modify the setupPhotoUploads function to add year and activity constraints
+        function setupPhotoUploads() {
+            const photoInput = document.getElementById('photoUpload');
+            const uploadLabel = document.querySelector('.custom-file-upload label');
+            
+            if (photoInput && uploadLabel) {
+                // Initially disable the upload button
+                updatePhotoUploadState();
+                
+                // Add event listener to the photo upload input
+                photoInput.addEventListener('change', function(e) {
+                    // First check if year and activity are selected
+                    if (!validateYearAndActivity()) {
+                        e.preventDefault();
+                        resetFileInput(this);
+                        return;
+                    }
+                    
+                    // Auto-upload images when selected
+                    if (this.files && this.files.length > 0) {
+                        // Clear existing images first when new ones are selected
+                        if (!window.currentNarrativeId || window.currentNarrativeId === '0') {
+                            const previewContainer = document.getElementById('photoPreviewContainer');
+                            previewContainer.innerHTML = '';
+                        }
+                        
+                        uploadImages(this.files);
+                    }
+                });
+                
+                // Add event listeners to year and activity dropdowns to update upload state
+                const yearSelect = document.getElementById('year');
+                const titleSelect = document.getElementById('title');
+                
+                if (yearSelect) {
+                    yearSelect.addEventListener('change', updatePhotoUploadState);
+                }
+                
+                if (titleSelect) {
+                    titleSelect.addEventListener('change', updatePhotoUploadState);
+                }
+                
+                // Initialize uploadedImagePaths array
+                window.uploadedImagePaths = window.uploadedImagePaths || [];
+            }
+        }
+        
+        // Function to validate year and activity selection
+        function validateYearAndActivity() {
+            const yearSelect = document.getElementById('year');
+            const titleSelect = document.getElementById('title');
+            
+            if (!yearSelect.value || yearSelect.value === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Year Required',
+                    text: 'Please select a year before uploading images',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                return false;
+            }
+            
+            if (!titleSelect.value || titleSelect.value === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Activity Required',
+                    text: 'Please select an activity before uploading images',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Function to update photo upload button state based on selections
+        function updatePhotoUploadState() {
+            const yearSelect = document.getElementById('year');
+            const titleSelect = document.getElementById('title');
+            const uploadLabel = document.querySelector('.custom-file-upload label');
+            const photoInput = document.getElementById('photoUpload');
+            const uploadContainer = document.querySelector('.custom-file-upload');
+            
+            if (yearSelect && titleSelect && uploadLabel && photoInput && uploadContainer) {
+                if (!yearSelect.value || !titleSelect.value) {
+                    // Disable upload
+                    photoInput.disabled = true;
+                    uploadContainer.classList.add('disabled');
+                    uploadLabel.title = 'Please select year and activity first';
+                } else {
+                    // Enable upload
+                    photoInput.disabled = false;
+                    uploadContainer.classList.remove('disabled');
+                    uploadLabel.title = 'Upload images';
+                }
+            }
+        }
+        
+        // Helper function to reset file input
+        function resetFileInput(input) {
+            input.value = '';
+        }
+        
+        // Update loadNarrativeForEdit function to handle the new evaluation data format
+        function loadNarrativeForEdit(narrativeId) {
+            // Existing code...
+            
+            // Add this to the success callback where form fields are populated
+            if (response.success) {
+                // Existing field population...
+                
+                // Handle evaluation data - parse JSON from evaluation field
+                try {
+                    if (narrative.evaluation) {
+                        const evalData = JSON.parse(narrative.evaluation);
+                        
+                        // Check for new format (activity and timeliness properties)
+                        if (evalData.activity) {
+                            // Handle new format
+                            
+                            // Populate activity ratings
+                            if (evalData.activity["Excellent"]) {
+                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                    evalData.activity["Excellent"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                    evalData.activity["Excellent"]["Others"] || 0;
+                            }
+                            
+                            if (evalData.activity["Very Satisfactory"]) {
+                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                    evalData.activity["Very Satisfactory"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                    evalData.activity["Very Satisfactory"]["Others"] || 0;
+                            }
+                            
+                            if (evalData.activity["Satisfactory"]) {
+                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                    evalData.activity["Satisfactory"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                    evalData.activity["Satisfactory"]["Others"] || 0;
+                            }
+                            
+                            if (evalData.activity["Fair"]) {
+                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                    evalData.activity["Fair"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                    evalData.activity["Fair"]["Others"] || 0;
+                            }
+                            
+                            if (evalData.activity["Poor"]) {
+                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                    evalData.activity["Poor"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                    evalData.activity["Poor"]["Others"] || 0;
+                            }
+                            
+                            // Populate timeliness ratings if available
+                            if (evalData.timeliness) {
+                                if (evalData.timeliness["Excellent"]) {
+                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                        evalData.timeliness["Excellent"]["BatStateU"] || 0;
+                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
+                                        evalData.timeliness["Excellent"]["Others"] || 0;
+                                }
+                                
+                                if (evalData.timeliness["Very Satisfactory"]) {
+                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
+                                        evalData.timeliness["Very Satisfactory"]["BatStateU"] || 0;
+                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
+                                        evalData.timeliness["Very Satisfactory"]["Others"] || 0;
+                                }
+                                
+                                if (evalData.timeliness["Satisfactory"]) {
+                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                        evalData.timeliness["Satisfactory"]["BatStateU"] || 0;
+                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                        evalData.timeliness["Satisfactory"]["Others"] || 0;
+                                }
+                                
+                                if (evalData.timeliness["Fair"]) {
+                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                        evalData.timeliness["Fair"]["BatStateU"] || 0;
+                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
+                                        evalData.timeliness["Fair"]["Others"] || 0;
+                                }
+                                
+                                if (evalData.timeliness["Poor"]) {
+                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                        evalData.timeliness["Poor"]["BatStateU"] || 0;
+                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
+                                        evalData.timeliness["Poor"]["Others"] || 0;
+                                }
+                            }
+                        } 
+                        // Handle old format (ratings and timeliness properties)
+                        else if (evalData.ratings) {
+                            // Populate activity ratings
+                            if (evalData.ratings.excellent) {
+                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                    evalData.ratings.excellent.batstateu || 0;
+                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                    evalData.ratings.excellent.others || 0;
+                            }
+                            
+                            if (evalData.ratings.very_satisfactory) {
+                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                    evalData.ratings.very_satisfactory.batstateu || 0;
+                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                    evalData.ratings.very_satisfactory.others || 0;
+                            }
+                            
+                            if (evalData.ratings.satisfactory) {
+                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                    evalData.ratings.satisfactory.batstateu || 0;
+                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                    evalData.ratings.satisfactory.others || 0;
+                            }
+                            
+                            if (evalData.ratings.fair) {
+                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                    evalData.ratings.fair.batstateu || 0;
+                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                    evalData.ratings.fair.others || 0;
+                            }
+                            
+                            if (evalData.ratings.poor) {
+                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                    evalData.ratings.poor.batstateu || 0;
+                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                    evalData.ratings.poor.others || 0;
+                            }
+                            
+                            // Populate timeliness ratings if available
+                            if (evalData.timeliness) {
+                                if (evalData.timeliness.excellent) {
+                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                        evalData.timeliness.excellent.batstateu || 0;
+                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
+                                        evalData.timeliness.excellent.others || 0;
+                                }
+                                
+                                if (evalData.timeliness.very_satisfactory) {
+                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
+                                        evalData.timeliness.very_satisfactory.batstateu || 0;
+                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
+                                        evalData.timeliness.very_satisfactory.others || 0;
+                                }
+                                
+                                if (evalData.timeliness.satisfactory) {
+                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                        evalData.timeliness.satisfactory.batstateu || 0;
+                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                        evalData.timeliness.satisfactory.others || 0;
+                                }
+                                
+                                if (evalData.timeliness.fair) {
+                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                        evalData.timeliness.fair.batstateu || 0;
+                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
+                                        evalData.timeliness.fair.others || 0;
+                                }
+                                
+                                if (evalData.timeliness.poor) {
+                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                        evalData.timeliness.poor.batstateu || 0;
+                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
+                                        evalData.timeliness.poor.others || 0;
+                                }
+                            }
+                        }
+                        // Handle direct object format (Excellent, Very Satisfactory, etc.)
+                        else if (evalData["Excellent"] || evalData["Fair"] || evalData["Poor"] || evalData["Satisfactory"] || evalData["Very Satisfactory"]) {
+                            // This is the simplest format with just the ratings
+                            if (evalData["Excellent"]) {
+                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                    evalData["Excellent"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                    evalData["Excellent"]["Others"] || 0;
+                            }
+                            
+                            if (evalData["Very Satisfactory"]) {
+                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                    evalData["Very Satisfactory"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                    evalData["Very Satisfactory"]["Others"] || 0;
+                            }
+                            
+                            if (evalData["Satisfactory"]) {
+                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                    evalData["Satisfactory"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                    evalData["Satisfactory"]["Others"] || 0;
+                            }
+                            
+                            if (evalData["Fair"]) {
+                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                    evalData["Fair"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                    evalData["Fair"]["Others"] || 0;
+                            }
+                            
+                            if (evalData["Poor"]) {
+                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                    evalData["Poor"]["BatStateU"] || 0;
+                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                    evalData["Poor"]["Others"] || 0;
+                            }
+                        }
+                        
+                        // Recalculate totals
+                        calculateTotals();
+                        calculateTimelinessTotal();
+                    }
+                } catch (e) {
+                    console.error("Error parsing evaluation data:", e);
+                    // If there's an error, just set the raw value to the hidden field
+                    document.getElementById('evaluation').value = narrative.evaluation || '';
+                }
+                
+                // After populating data, enable photo upload if both year and activity are set
+                updatePhotoUploadState();
+            }
+        }
+        
+        // Update showNarrativeDetails to display the new evaluation table format
+        function showNarrativeDetails(narrativeId) {
+            // Existing code...
+            
+            // Inside the success callback, modify the HTML generation for evaluation display
+            if (response.success) {
+                // Existing HTML generation...
+                
+                html += `<div class="mt-3"><h6>Evaluation Results:</h6>`;
+                
+                // Check if evaluation data exists and is in JSON format
+                try {
+                    if (narrative.evaluation) {
+                        const evalData = JSON.parse(narrative.evaluation);
+                        
+                        // Check for new format (activity property)
+                        if (evalData.activity) {
+                            // Display activity ratings table
+                            html += `
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 25%">Scale</th>
+                                            <th scope="col">BatStateU Participants</th>
+                                            <th scope="col">Participants from other Institutions</th>
+                                            <th scope="col" style="width: 15%">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Excellent</th>
+                                            <td>${evalData.activity["Excellent"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData.activity["Excellent"]?.["Others"] || 0}</td>
+                                            <td>${(evalData.activity["Excellent"]?.["BatStateU"] || 0) + (evalData.activity["Excellent"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Very Satisfactory</th>
+                                            <td>${evalData.activity["Very Satisfactory"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData.activity["Very Satisfactory"]?.["Others"] || 0}</td>
+                                            <td>${(evalData.activity["Very Satisfactory"]?.["BatStateU"] || 0) + (evalData.activity["Very Satisfactory"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Satisfactory</th>
+                                            <td>${evalData.activity["Satisfactory"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData.activity["Satisfactory"]?.["Others"] || 0}</td>
+                                            <td>${(evalData.activity["Satisfactory"]?.["BatStateU"] || 0) + (evalData.activity["Satisfactory"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Fair</th>
+                                            <td>${evalData.activity["Fair"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData.activity["Fair"]?.["Others"] || 0}</td>
+                                            <td>${(evalData.activity["Fair"]?.["BatStateU"] || 0) + (evalData.activity["Fair"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Poor</th>
+                                            <td>${evalData.activity["Poor"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData.activity["Poor"]?.["Others"] || 0}</td>
+                                            <td>${(evalData.activity["Poor"]?.["BatStateU"] || 0) + (evalData.activity["Poor"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            `;
+                            
+                            // Display timeliness ratings table if available
+                            if (evalData.timeliness) {
+                                html += `
+                                <div class="mt-4">
+                                    <label class="form-label">Number of Beneficiaries who rated The Timeliness of the activity as:</label>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" style="width: 25%">Scale</th>
+                                                    <th scope="col">BatStateU Participants</th>
+                                                    <th scope="col">Participants from other Institutions</th>
+                                                    <th scope="col" style="width: 15%">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Excellent</th>
+                                                    <td>${evalData.timeliness["Excellent"]?.["BatStateU"] || 0}</td>
+                                                    <td>${evalData.timeliness["Excellent"]?.["Others"] || 0}</td>
+                                                    <td>${(evalData.timeliness["Excellent"]?.["BatStateU"] || 0) + (evalData.timeliness["Excellent"]?.["Others"] || 0)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Very Satisfactory</th>
+                                                    <td>${evalData.timeliness["Very Satisfactory"]?.["BatStateU"] || 0}</td>
+                                                    <td>${evalData.timeliness["Very Satisfactory"]?.["Others"] || 0}</td>
+                                                    <td>${(evalData.timeliness["Very Satisfactory"]?.["BatStateU"] || 0) + (evalData.timeliness["Very Satisfactory"]?.["Others"] || 0)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Satisfactory</th>
+                                                    <td>${evalData.timeliness["Satisfactory"]?.["BatStateU"] || 0}</td>
+                                                    <td>${evalData.timeliness["Satisfactory"]?.["Others"] || 0}</td>
+                                                    <td>${(evalData.timeliness["Satisfactory"]?.["BatStateU"] || 0) + (evalData.timeliness["Satisfactory"]?.["Others"] || 0)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Fair</th>
+                                                    <td>${evalData.timeliness["Fair"]?.["BatStateU"] || 0}</td>
+                                                    <td>${evalData.timeliness["Fair"]?.["Others"] || 0}</td>
+                                                    <td>${(evalData.timeliness["Fair"]?.["BatStateU"] || 0) + (evalData.timeliness["Fair"]?.["Others"] || 0)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Poor</th>
+                                                    <td>${evalData.timeliness["Poor"]?.["BatStateU"] || 0}</td>
+                                                    <td>${evalData.timeliness["Poor"]?.["Others"] || 0}</td>
+                                                    <td>${(evalData.timeliness["Poor"]?.["BatStateU"] || 0) + (evalData.timeliness["Poor"]?.["Others"] || 0)}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                `;
+                            }
+                        }
+                        // Handle old format with ratings property
+                        else if (evalData.ratings) {
+                            html += `
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 25%">Scale</th>
+                                            <th scope="col">BatStateU Participants</th>
+                                            <th scope="col">Participants from other Institutions</th>
+                                            <th scope="col" style="width: 15%">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Excellent</th>
+                                            <td>${evalData.ratings.excellent?.batstateu || 0}</td>
+                                            <td>${evalData.ratings.excellent?.others || 0}</td>
+                                            <td>${evalData.ratings.excellent?.total || 0}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Very Satisfactory</th>
+                                            <td>${evalData.ratings.very_satisfactory?.batstateu || 0}</td>
+                                            <td>${evalData.ratings.very_satisfactory?.others || 0}</td>
+                                            <td>${evalData.ratings.very_satisfactory?.total || 0}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Satisfactory</th>
+                                            <td>${evalData.ratings.satisfactory?.batstateu || 0}</td>
+                                            <td>${evalData.ratings.satisfactory?.others || 0}</td>
+                                            <td>${evalData.ratings.satisfactory?.total || 0}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Fair</th>
+                                            <td>${evalData.ratings.fair?.batstateu || 0}</td>
+                                            <td>${evalData.ratings.fair?.others || 0}</td>
+                                            <td>${evalData.ratings.fair?.total || 0}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Poor</th>
+                                            <td>${evalData.ratings.poor?.batstateu || 0}</td>
+                                            <td>${evalData.ratings.poor?.others || 0}</td>
+                                            <td>${evalData.ratings.poor?.total || 0}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total</th>
+                                            <td>${evalData.totals?.batstateu || 0}</td>
+                                            <td>${evalData.totals?.others || 0}</td>
+                                            <td>${evalData.totals?.grand_total || 0}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            `;
+                            
+                            // Add timeliness table if available
+                            if (evalData.timeliness) {
+                                html += `
+                                <div class="mt-4">
+                                    <label class="form-label">Number of Beneficiaries who rated The Timeliness of the activity as:</label>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" style="width: 25%">Scale</th>
+                                                    <th scope="col">BatStateU Participants</th>
+                                                    <th scope="col">Participants from other Institutions</th>
+                                                    <th scope="col" style="width: 15%">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Excellent</th>
+                                                    <td>${evalData.timeliness.excellent?.batstateu || 0}</td>
+                                                    <td>${evalData.timeliness.excellent?.others || 0}</td>
+                                                    <td>${evalData.timeliness.excellent?.total || 0}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Very Satisfactory</th>
+                                                    <td>${evalData.timeliness.very_satisfactory?.batstateu || 0}</td>
+                                                    <td>${evalData.timeliness.very_satisfactory?.others || 0}</td>
+                                                    <td>${evalData.timeliness.very_satisfactory?.total || 0}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Satisfactory</th>
+                                                    <td>${evalData.timeliness.satisfactory?.batstateu || 0}</td>
+                                                    <td>${evalData.timeliness.satisfactory?.others || 0}</td>
+                                                    <td>${evalData.timeliness.satisfactory?.total || 0}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Fair</th>
+                                                    <td>${evalData.timeliness.fair?.batstateu || 0}</td>
+                                                    <td>${evalData.timeliness.fair?.others || 0}</td>
+                                                    <td>${evalData.timeliness.fair?.total || 0}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Poor</th>
+                                                    <td>${evalData.timeliness.poor?.batstateu || 0}</td>
+                                                    <td>${evalData.timeliness.poor?.others || 0}</td>
+                                                    <td>${evalData.timeliness.poor?.total || 0}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Total</th>
+                                                    <td>${evalData.timeliness_totals?.batstateu || 0}</td>
+                                                    <td>${evalData.timeliness_totals?.others || 0}</td>
+                                                    <td>${evalData.timeliness_totals?.grand_total || 0}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                `;
+                            }
+                        }
+                        // Handle direct object format (Excellent, Very Satisfactory, etc.)
+                        else if (evalData["Excellent"] || evalData["Fair"] || evalData["Poor"] || evalData["Satisfactory"] || evalData["Very Satisfactory"]) {
+                            html += `
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 25%">Scale</th>
+                                            <th scope="col">BatStateU Participants</th>
+                                            <th scope="col">Participants from other Institutions</th>
+                                            <th scope="col" style="width: 15%">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Excellent</th>
+                                            <td>${evalData["Excellent"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData["Excellent"]?.["Others"] || 0}</td>
+                                            <td>${(evalData["Excellent"]?.["BatStateU"] || 0) + (evalData["Excellent"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Very Satisfactory</th>
+                                            <td>${evalData["Very Satisfactory"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData["Very Satisfactory"]?.["Others"] || 0}</td>
+                                            <td>${(evalData["Very Satisfactory"]?.["BatStateU"] || 0) + (evalData["Very Satisfactory"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Satisfactory</th>
+                                            <td>${evalData["Satisfactory"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData["Satisfactory"]?.["Others"] || 0}</td>
+                                            <td>${(evalData["Satisfactory"]?.["BatStateU"] || 0) + (evalData["Satisfactory"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Fair</th>
+                                            <td>${evalData["Fair"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData["Fair"]?.["Others"] || 0}</td>
+                                            <td>${(evalData["Fair"]?.["BatStateU"] || 0) + (evalData["Fair"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Poor</th>
+                                            <td>${evalData["Poor"]?.["BatStateU"] || 0}</td>
+                                            <td>${evalData["Poor"]?.["Others"] || 0}</td>
+                                            <td>${(evalData["Poor"]?.["BatStateU"] || 0) + (evalData["Poor"]?.["Others"] || 0)}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            `;
+                        } else {
+                            html += `<p>No evaluation data available</p>`;
+                        }
+                    } else {
+                        html += `<p>No evaluation data available</p>`;
+                    }
+                } catch (e) {
+                    // If not JSON, display as plain text
+                    html += `<p>${narrative.evaluation || 'No evaluation data available'}</p>`;
+                }
+                
+                html += `</div>`;
+            }
+        }
+        
+        // Add this to the DOMContentLoaded event
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize evaluation table calculations
+            setupEvaluationTableCalculations();
+            
+            // Other initialization code...
+        });
+
+        // Function to clear temporary image uploads
+        function clearTemporaryUploads() {
+            console.log("Clearing temporary uploads");
+            
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('clear_temp', 'true');
+            
+            // Send AJAX request to clear temporary uploads
+            $.ajax({
+                url: 'image_upload_handler.php',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(response) {
+                    console.log("Temporary uploads cleared:", response);
+                    
+                    // Clear the preview container
+                    const previewContainer = document.getElementById('photoPreviewContainer');
+                    previewContainer.innerHTML = '';
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error clearing temporary uploads:", error);
+                }
+            });
+        }
+        
+        // Function to reset the form
+        function resetForm(clearAll = true) {
+            // Reset all fields
+            document.getElementById('narrative-form').reset();
+            
+            // Clear the photo preview container
+            document.getElementById('photoPreviewContainer').innerHTML = '';
+            
+            // Reset the current narrative ID
+            window.currentNarrativeId = null;
+            document.getElementById('narrative_id').value = '0';
+            
+            // Close any open details panel
+            if (document.getElementById('details-panel').classList.contains('show')) {
+                document.getElementById('details-toggle').click();
+            }
+            
+            // Clear any file input
+            const photoInput = document.getElementById('photoUpload');
+            if (photoInput) photoInput.value = '';
+            
+            // If specified, also clear temporary uploads on the server
+            if (clearAll) {
+                clearTemporaryUploads();
+            }
+            
+            // Reset edit state
+            window.isEditing = false;
+            
+            // Reset button states
+            updateButtonStates();
+        }
+
+        // Document ready function
+        $(document).ready(function() {
+            // Clear any old temporary uploads when the page loads
+            clearTemporaryUploads();
+            
+            // Setup photo uploads
+            setupPhotoUploads();
+            
+            // Initialize evaluation table calculations
+            setupEvaluationTableCalculations();
+            
+            // Add a clear uploads button click handler
+            $('#clearUploadsBtn').on('click', function() {
+                clearTemporaryUploads();
+            });
+        });
     </script>
     <script src="../js/approval-badge.js"></script>
+    
+    
+   
 </body>
 </html>
