@@ -1219,6 +1219,41 @@ html {
             cursor: not-allowed !important;
             opacity: 0.65;
         }
+
+        /* Readonly title field styling in edit mode */
+        #title.form-select[readonly] {
+            background-color: #2B3035;
+            color: #ffffff;
+            border-color: #2B3035;
+            opacity: 0.9;
+            cursor: not-allowed;
+            pointer-events: none;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        /* Dark theme support for readonly title field */
+        [data-bs-theme="dark"] #title.form-select[readonly] {
+            background-color: #2B3035;
+            color: #ffffff;
+            border-color: #6c757d;
+            pointer-events: none;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        
+        /* Disable selection of options with narratives (red color) */
+        #title option[data-has-narrative="true"] {
+            color: #ff0000;
+            background-color: #f8d7da;
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.7;
+            text-decoration: line-through;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -1334,6 +1369,18 @@ if($isCentral):
                             <label for="campus" class="form-label">Campus</label>
                             <select class="form-select" id="campus" name="campus" required <?php if(!$isCentral) echo 'disabled'; ?>>
                                 <option value="" selected disabled>Select Campus</option>
+                                <option value="Central">Central</option>
+                                <option value="Alangilan">Alangilan</option>
+                                <option value="Arasof-Nasugbu">Arasof-Nasugbu</option>
+                                <option value="Balayan">Balayan</option>
+                                <option value="Lemery">Lemery</option>
+                                <option value="Lipa">Lipa</option>
+                                <option value="Lobo">Lobo</option>
+                                <option value="Mabini">Mabini</option>
+                                <option value="Malvar">Malvar</option>
+                                <option value="Pablo Borbon">Pablo Borbon</option>
+                                <option value="Rosario">Rosario</option>
+                                <option value="San Juan">San Juan</option>
                                 <!-- Will be populated dynamically -->
                             </select>
                         </div>
@@ -1527,14 +1574,6 @@ if($isCentral):
                                         <label for="photoUpload" class="btn btn-outline-primary w-100 py-2">
                                             <i class="fas fa-cloud-upload-alt me-2"></i> Upload Images
                                         </label>
-                                        <div class="d-flex gap-2 mt-2">
-                                            <button type="button" id="newUploadBatchBtn" class="btn btn-outline-secondary flex-grow-1">
-                                                <i class="fas fa-sync me-2"></i> New Upload Batch
-                                            </button>
-                                            <button type="button" id="clearUploadsBtn" class="btn btn-outline-danger flex-grow-1">
-                                                <i class="fas fa-trash me-2"></i> Clear All Uploads
-                                            </button>
-                                        </div>
                                     </div>
                                     <div id="photoPreviewContainer" class="row g-2 mt-2"></div>
                                     <div id="upload-status"></div>
@@ -1770,53 +1809,6 @@ if($isCentral):
                     if (this.files && this.files.length > 0) {
                         uploadImages(this.files, false); // Don't clear previous uploads by default
                     }
-                });
-            }
-            
-            // Add event listener to the new upload batch button
-            const newUploadBatchBtn = document.getElementById('newUploadBatchBtn');
-            if (newUploadBatchBtn) {
-                newUploadBatchBtn.addEventListener('click', function() {
-                    // Ask for confirmation
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Clear Existing Uploads?',
-                        text: 'This will clear all existing uploaded images. Continue?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, clear them',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Clear temporary uploads and then trigger the file input dialog
-                            clearTemporaryUploads();
-                            
-                            // After clearing, trigger the file input
-                            setTimeout(() => {
-                                photoInput.click();
-                            }, 500);
-                        }
-                    });
-                });
-            }
-            
-            // Add event listener to the clear uploads button
-            const clearUploadsBtn = document.getElementById('clearUploadsBtn');
-            if (clearUploadsBtn) {
-                clearUploadsBtn.addEventListener('click', function() {
-                    // Ask for confirmation
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Clear All Uploads?',
-                        text: 'This will remove all uploaded images. Continue?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, clear them',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Clear temporary uploads
-                            clearTemporaryUploads();
-                        }
-                    });
                 });
             }
         }
@@ -2337,7 +2329,7 @@ if($isCentral):
             if (imagePaths && imagePaths.length > 6) {
                 const warningDiv = document.createElement('div');
                 warningDiv.className = 'col-12 mt-2 alert alert-warning';
-                warningDiv.innerHTML = `<small>Note: Only showing the 6 most recent images. ${imagePaths.length - 6} older images not displayed. Use "New Upload Batch" to start fresh.</small>`;
+                warningDiv.innerHTML = `<small>Note: Only showing the 6 most recent images. ${imagePaths.length - 6} older images not displayed.</small>`;
                 previewContainer.appendChild(warningDiv);
             }
         }
@@ -2470,14 +2462,15 @@ if($isCentral):
             let currentNarrativeId = null;
             let isEditing = false;
             const isCentral = <?php echo $isCentral ? 'true' : 'false'; ?>;
+            let narrativeIdField = null; // Add global variable for narrative ID field
 
             // DOM elements
             const form = document.getElementById('narrativeForm');
-            const addBtn = document.getElementById('addBtn');
-            const editBtn = document.getElementById('editBtn');
-            const deleteBtn = document.getElementById('deleteBtn');
-            const viewBtn = document.getElementById('viewBtn');
-            const narrativeIdField = document.getElementById('narrative_id');
+            let addBtn = document.getElementById('addBtn');
+            let editBtn = document.getElementById('editBtn');
+            let deleteBtn = document.getElementById('deleteBtn');
+            let viewBtn = document.getElementById('viewBtn');
+            narrativeIdField = document.getElementById('narrative_id');
             const saveSpinner = document.getElementById('save-spinner');
             
             // Initially set up buttons
@@ -2490,13 +2483,21 @@ if($isCentral):
             
             // Event listeners
             form.addEventListener('submit', function(e) {
+                // Prevent default form submission
                 e.preventDefault();
+                
+                // Check if form is already being submitted
+                if (document.getElementById('save-spinner').style.display === 'inline-block') {
+                    console.log('Form submission already in progress, preventing duplicate submission');
+                    return;
+                }
                 
                 // If not central, ensure the campus is set from the override
                 if (!isCentral && document.getElementById('campus_override')) {
                     document.getElementById('campus_override').value = document.getElementById('campus').value;
                 }
                 
+                // Call the form submission handler directly
                 handleFormSubmit(e);
             });
             
@@ -2603,64 +2604,12 @@ if($isCentral):
                 // Show loading message
                 const saveStatus = document.getElementById('save-status');
                 
+                // Get filter parameters for users
+                let campusFilter = isCentral ? '' : (document.getElementById('campus_override')?.value || document.getElementById('campus').value);
+                console.log(`${isCentral ? 'Central' : 'Non-central'} user editing narratives for campus:`, campusFilter);
                 
-                if (isCentral) {
-                    // For central users, show a campus filter dropdown
-                    Swal.fire({
-                        title: 'Select Campus',
-                        html: `
-                            <div class="form-group">
-                                <select id="campusFilter" class="form-select" style="background-color: #404040; color: #ffffff; border-color: #6c757d;">
-                                    <option value="">All Campuses</option>
-                                </select>
-                            </div>
-                        `,
-                        showCancelButton: true,
-                        confirmButtonText: 'Edit Narratives',
-                        cancelButtonText: 'Cancel',
-                        background: '#2d2d2d',
-                        color: '#ffffff',
-                        confirmButtonColor: '#7b1fa2',
-                        cancelButtonColor: '#6c757d',
-                        didOpen: () => {
-                            // Populate campus dropdown
-                            $.ajax({
-                                url: 'narrative_handler.php',
-                                type: 'POST',
-                                data: { action: 'get_campuses' },
-                                dataType: 'json',
-                                success: function(response) {
-                                    if (response.success) {
-                                        const campusSelect = document.getElementById('campusFilter');
-                                        
-                                        // Add new options
-                                        response.data.forEach(campus => {
-                                            const option = document.createElement('option');
-                                            option.value = campus;
-                                            option.textContent = campus;
-                                            campusSelect.appendChild(option);
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const campusFilter = document.getElementById('campusFilter').value;
-                            // Load narratives with the selected campus filter
-                            loadNarrativesAndShowList(campusFilter, 'edit');
-                        } else {
-                            saveStatus.innerHTML = '';
-                        }
-                    });
-                } else {
-                    // Get filter parameters for non-central users
-                    let campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
-                    console.log("Non-central user editing narratives for campus:", campusFilter);
-                    
-                    // Load narratives with the user's campus filter
-                    loadNarrativesAndShowList(campusFilter, 'edit');
-                }
+                // Load narratives with the user's campus filter
+                loadNarrativesAndShowList(campusFilter, 'edit');
             });
             
             deleteBtn.addEventListener('click', function() {
@@ -2686,130 +2635,33 @@ if($isCentral):
                 // Show loading message
                 const saveStatus = document.getElementById('save-status');
                 
-                if (isCentral) {
-                    // For central users, show a campus filter dropdown
-                    Swal.fire({
-                        title: 'Select Campus',
-                        html: `
-                            <div class="form-group">
-                                <select id="campusFilter" class="form-select" style="background-color: #404040; color: #ffffff; border-color: #6c757d;">
-                                    <option value="">All Campuses</option>
-                                </select>
-                            </div>
-                        `,
-                        showCancelButton: true,
-                        confirmButtonText: 'Delete Narratives',
-                        cancelButtonText: 'Cancel',
-                        background: '#2d2d2d',
-                        color: '#ffffff',
-                        confirmButtonColor: '#7b1fa2',
-                        cancelButtonColor: '#6c757d',
-                        didOpen: () => {
-                            // Populate campus dropdown
-                            $.ajax({
-                                url: 'narrative_handler.php',
-                                type: 'POST',
-                                data: { action: 'get_campuses' },
-                                dataType: 'json',
-                                success: function(response) {
-                                    if (response.success) {
-                                        const campusSelect = document.getElementById('campusFilter');
-                                        
-                                        // Add new options
-                                        response.data.forEach(campus => {
-                                            const option = document.createElement('option');
-                                            option.value = campus;
-                                            option.textContent = campus;
-                                            campusSelect.appendChild(option);
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const campusFilter = document.getElementById('campusFilter').value;
-                            // Load narratives with the selected campus filter
-                            loadNarrativesAndShowList(campusFilter, 'delete');
-                        } else {
-                            saveStatus.innerHTML = '';
-                        }
-                    });
-                } else {
-                    // Get filter parameters for non-central users
-                    let campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
-                    console.log("Non-central user deleting narratives for campus:", campusFilter);
-                    
-                    // Load narratives with the user's campus filter
-                    loadNarrativesAndShowList(campusFilter, 'delete');
-                }
+                // Get filter parameters for users
+                let campusFilter = isCentral ? '' : (document.getElementById('campus_override')?.value || document.getElementById('campus').value);
+                console.log(`${isCentral ? 'Central' : 'Non-central'} user deleting narratives for campus:`, campusFilter);
+                
+                // Load narratives with the user's campus filter
+                loadNarrativesAndShowList(campusFilter, 'delete');
             });
             
             viewBtn.addEventListener('click', function() {
                 // Show loading message
                 const saveStatus = document.getElementById('save-status');
                 
-                if (isCentral) {
-                    // For central users, show a campus filter dropdown
-                    Swal.fire({
-                        title: 'Select Campus',
-                        html: `
-                            <div class="form-group">
-                                <select id="campusFilter" class="form-select" style="background-color: #404040; color: #ffffff; border-color: #6c757d;">
-                                    <option value="">All Campuses</option>
-                                </select>
-                            </div>
-                        `,
-                        showCancelButton: true,
-                        confirmButtonText: 'View Narratives',
-                        cancelButtonText: 'Cancel',
-                        background: '#2d2d2d',
-                        color: '#ffffff',
-                        confirmButtonColor: '#7b1fa2',
-                        cancelButtonColor: '#6c757d',
-                        didOpen: () => {
-                            // Populate campus dropdown
-                            $.ajax({
-                                url: 'narrative_handler.php',
-                                type: 'POST',
-                                data: { action: 'get_campuses' },
-                                dataType: 'json',
-                                success: function(response) {
-                                    if (response.success) {
-                                        const campusSelect = document.getElementById('campusFilter');
-                                        
-                                        // Add new options
-                                        response.data.forEach(campus => {
-                                            const option = document.createElement('option');
-                                            option.value = campus;
-                                            option.textContent = campus;
-                                            campusSelect.appendChild(option);
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const campusFilter = document.getElementById('campusFilter').value;
-                            // Load narratives with the selected campus filter
-                            loadNarrativesAndShowList(campusFilter, 'view');
-                        } else {
-                            saveStatus.innerHTML = '';
-                        }
-                    });
-                } else {
-                    // Get filter parameters for non-central users
-                    let campusFilter = document.getElementById('campus_override')?.value || document.getElementById('campus').value;
-                    console.log("Non-central user viewing narratives for campus:", campusFilter);
-                    
-                    // Load narratives with the user's campus filter
-                    loadNarrativesAndShowList(campusFilter, 'view');
-                }
+                // Get filter parameters for users
+                let campusFilter = isCentral ? '' : (document.getElementById('campus_override')?.value || document.getElementById('campus').value);
+                console.log(`${isCentral ? 'Central' : 'Non-central'} user viewing narratives for campus:`, campusFilter);
+                
+                // Load narratives with the user's campus filter
+                loadNarrativesAndShowList(campusFilter, 'view');
             });
             
             // Function to load narratives and show the list with the specified action
             function loadNarrativesAndShowList(campusFilter, action) {
+                console.log(`Loading narratives with campus filter: ${campusFilter}, action: ${action}`);
+                
+                // Store the action for later use
+                window.currentListAction = action || 'view';
+                
                 const saveStatus = document.getElementById('save-status');
                 
                 // Fetch the latest data before showing the modal
@@ -2878,6 +2730,15 @@ if($isCentral):
             
             // Function to handle form submission (create or update)
             function handleFormSubmit(e) {
+                // Prevent default form submission
+                e.preventDefault();
+                
+                // Check if form is already being submitted
+                if (document.getElementById('save-spinner').style.display === 'inline-block') {
+                    console.log('Form submission already in progress, preventing duplicate submission');
+                    return;
+                }
+                
                 const form = document.getElementById('narrativeForm');
                 if (!form.checkValidity()) {
                     form.reportValidity();
@@ -2915,12 +2776,12 @@ if($isCentral):
                 // Create FormData object from the form
                 const formData = new FormData(form);
                 
-                // Get current editing state
-                const isEditing = window.isEditing || false;
-                const currentNarrativeId = window.currentNarrativeId || 0;
+                // Get current editing state - store locally to avoid scope issues
+                let currentlyEditing = window.isEditing || isEditing || false;
+                let narrativeId = window.currentNarrativeId || currentNarrativeId || 0;
                 
                 // Add action based on whether we're editing or adding
-                formData.append('action', isEditing ? 'update' : 'create');
+                formData.append('action', currentlyEditing ? 'update' : 'create');
                 
                 // If not central, ensure the campus is set
                 if (!isCentral && document.getElementById('campus_override')) {
@@ -2953,7 +2814,7 @@ if($isCentral):
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
-                                text: response.message || (isEditing ? 'Narrative updated successfully' : 'Narrative added successfully'),
+                                text: response.message || (currentlyEditing ? 'Narrative updated successfully' : 'Narrative added successfully'),
                                 toast: true,
                                 position: 'top-end',
                                 showConfirmButton: false,
@@ -2961,22 +2822,26 @@ if($isCentral):
                             });
                             
                             // If we were editing, exit edit mode but keep buttons enabled
-                            if (isEditing) {
+                            if (currentlyEditing) {
                                 // Reset editing state
                                 window.isEditing = false;
-                                const editBtn = document.getElementById('editBtn');
+                                isEditing = false;
+                                
+                                // Get button references
+                                let editBtn = document.getElementById('editBtn');
+                                let addBtn = document.getElementById('addBtn');
+                                let deleteBtn = document.getElementById('deleteBtn');
+                                
                                 editBtn.innerHTML = '<i class="fas fa-edit"></i>';
                                 editBtn.classList.remove('editing');
                                 editBtn.title = 'Edit narrative';
                                 
                                 // Reset add button
-                                const addBtn = document.getElementById('addBtn');
                                 addBtn.innerHTML = '<i class="fas fa-plus"></i>';
                                 addBtn.title = 'Add new narrative';
                                 addBtn.classList.remove('btn-update');
                                 
                                 // Make sure delete button is re-enabled
-                                const deleteBtn = document.getElementById('deleteBtn');
                                 deleteBtn.classList.remove('btn-disabled');
                                 deleteBtn.title = 'Delete narrative';
                                 
@@ -3049,18 +2914,22 @@ if($isCentral):
                 if (!currentNarrativeId) return;
                 
                 isEditing = true;
+                window.isEditing = true;
                 
                 // Change button appearance
+                const editBtn = document.getElementById('editBtn');
                 editBtn.innerHTML = '<i class="fas fa-times"></i>';
                 editBtn.classList.add('editing');
                 editBtn.title = 'Cancel editing';
                 
                 // Update add button to show it's for saving now
+                const addBtn = document.getElementById('addBtn');
                 addBtn.innerHTML = '<i class="fas fa-save"></i>';
                 addBtn.title = 'Save changes';
                 addBtn.classList.add('btn-update');
                 
                 // Disable delete button while in edit mode
+                const deleteBtn = document.getElementById('deleteBtn');
                 deleteBtn.classList.add('btn-disabled');
                 deleteBtn.title = 'Cannot delete while editing';
                 
@@ -3071,6 +2940,12 @@ if($isCentral):
             // Function to cancel edit mode
             function cancelEdit() {
                 isEditing = false;
+                window.isEditing = false;
+                
+                // Get fresh references to buttons
+                let editBtn = document.getElementById('editBtn');
+                let addBtn = document.getElementById('addBtn');
+                let deleteBtn = document.getElementById('deleteBtn');
                 
                 // Revert button appearance
                 editBtn.innerHTML = '<i class="fas fa-edit"></i>';
@@ -3146,7 +3021,29 @@ if($isCentral):
                                 // Then load activities for this campus and year
                                 loadActivitiesForCampusAndYear(function() {
                                     // Once activities are loaded, set the title
-                                    document.getElementById('title').value = narrative.title;
+                                    const titleSelect = document.getElementById('title');
+                                    // Handle case where title might be an object
+                                    titleSelect.value = narrative.title;
+                                    // Make the title field read-only in edit mode
+                                    titleSelect.setAttribute('readonly', 'readonly');
+                                    titleSelect.classList.add('bg-light');
+                                    titleSelect.style.opacity = '0.8';
+                                    titleSelect.style.color = '#333'; // Darker color that works in both light and dark mode
+                                    titleSelect.style.borderColor = '#6c757d'; // Grey border to indicate read-only
+                                    // Add a visual indicator that it's read-only
+                                    titleSelect.style.cursor = 'not-allowed';
+                                    // Add a note about read-only status
+                                    const titleFormGroup = titleSelect.closest('.form-group') || titleSelect.closest('.mb-3') || titleSelect.parentElement;
+                                    // Only add the note if the parent element exists
+                                    if (titleFormGroup) {
+                                        // Only add the note if it doesn't already exist
+                                        if (!titleFormGroup.querySelector('.form-text.text-muted')) {
+                                            const readOnlyNote = document.createElement('small');
+                                            readOnlyNote.className = 'form-text text-muted';
+                                            readOnlyNote.textContent = 'Activity cannot be changed in edit mode';
+                                            titleFormGroup.appendChild(readOnlyNote);
+                                        }
+                                    }
                                     
                                     // Populate the rest of the form fields
                                     document.getElementById('background').value = narrative.background || '';
@@ -3499,6 +3396,9 @@ if($isCentral):
                     return;
                 }
                 
+                // Store the current action in a global variable for reference
+                window.currentListAction = action;
+                
                 // Set title based on action
                 let title = 'Narrative Entries';
                 
@@ -3514,7 +3414,21 @@ if($isCentral):
                 document.getElementById('narrativeListModalLabel').textContent = title;
                 
                 // Create HTML for data table view
-                let html = `
+                let html = '';
+                
+                // Add campus filter for central users
+                if (isCentral) {
+                    html += `
+                    <div class="form-group mb-3">
+                        <label for="modalCampusFilter" class="form-label">Filter by Campus</label>
+                        <select id="modalCampusFilter" class="form-select" style="background-color: #404040; color: #ffffff; border-color: #6c757d;">
+                            <option value="">All Campuses</option>
+                        </select>
+                    </div>
+                    `;
+                }
+                
+                html += `
                 <div class="table-responsive">
                     <table class="table table-hover table-striped">
                         <thead class="table-dark">
@@ -3555,48 +3469,96 @@ if($isCentral):
                 
                 // Add click event listeners to rows after the modal is shown
                 document.getElementById('narrativeListModal').addEventListener('shown.bs.modal', function() {
-                    // Add click event listeners to rows
-                    document.querySelectorAll('.narrative-row').forEach(row => {
-                        row.addEventListener('click', function() {
-                            const narrativeId = this.getAttribute('data-id');
-                            const actionType = this.getAttribute('data-action');
-                            
-                            // Close the list modal
-                            const modal = bootstrap.Modal.getInstance(document.getElementById('narrativeListModal'));
-                            modal.hide();
-                            
-                            // Set current narrative ID
-                            currentNarrativeId = narrativeId;
-                            narrativeIdField.value = narrativeId;
-                            window.currentNarrativeId = narrativeId;
-                            
-                            // Handle different actions
-                            if (actionType === 'view') {
-                                showNarrativeDetails(narrativeId);
-                            } else if (actionType === 'edit') {
-                                // Enter edit mode
-                                isEditing = true;
-                                editBtn.innerHTML = '<i class="fas fa-times"></i>';
-                                editBtn.classList.add('editing');
-                                editBtn.title = 'Cancel editing';
-                                
-                                // Update add button to show it's for saving now
-                                addBtn.innerHTML = '<i class="fas fa-save"></i>';
-                                addBtn.title = 'Save changes';
-                                addBtn.classList.add('btn-update');
-                                
-                                // Disable delete button while in edit mode
-                                deleteBtn.classList.add('btn-disabled');
-                                deleteBtn.title = 'Cannot delete while editing';
-                                
-                                // Load narrative data into form
-                                loadNarrativeForEdit(narrativeId);
-                            } else if (actionType === 'delete') {
-                                // Call the function to show the delete confirmation
-                                deleteNarrative();
+                    // If central user, populate and setup the campus filter
+                    if (isCentral && document.getElementById('modalCampusFilter')) {
+                        // Populate campus dropdown
+                        $.ajax({
+                            url: 'narrative_handler.php',
+                            type: 'POST',
+                            data: { action: 'get_campuses' },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    const campusSelect = document.getElementById('modalCampusFilter');
+                                    
+                                    // Add new options
+                                    response.data.forEach(campus => {
+                                        const option = document.createElement('option');
+                                        option.value = campus;
+                                        option.textContent = campus;
+                                        campusSelect.appendChild(option);
+                                    });
+                                    
+                                    // Add change event to filter narratives
+                                    campusSelect.addEventListener('change', function() {
+                                        const selectedCampus = this.value;
+                                        // Use the stored global action variable
+                                        const currentAction = window.currentListAction || 'view';
+                                        filterNarrativesByCampus(selectedCampus, currentAction);
+                                    });
+                                }
                             }
                         });
-                    });
+                    }
+                    
+                    // Attach click event listeners to rows
+                    attachRowClickListeners();
+                    
+                    // Add a direct click handler to the table for event delegation
+                    const table = document.querySelector('#narrativeListModal .table');
+                    if (table) {
+                        table.addEventListener('click', function(e) {
+                            // Find the closest row that was clicked
+                            const row = e.target.closest('.narrative-row');
+                            if (row) {
+                                const narrativeId = row.getAttribute('data-id');
+                                const actionType = row.getAttribute('data-action');
+                                console.log(`Table click handler - Row clicked! ID: ${narrativeId}, Action: ${actionType}`);
+                                
+                                // Close the list modal
+                                const modal = bootstrap.Modal.getInstance(document.getElementById('narrativeListModal'));
+                                modal.hide();
+                                
+                                // Set current narrative ID
+                                currentNarrativeId = narrativeId;
+                                document.getElementById('narrative_id').value = narrativeId;
+                                window.currentNarrativeId = narrativeId;
+                                
+                                // Handle different actions
+                                if (actionType === 'view') {
+                                    showNarrativeDetails(narrativeId);
+                                } else if (actionType === 'edit') {
+                                    // Enter edit mode
+                                    isEditing = true;
+                                    window.isEditing = true;
+                                    
+                                    // Get fresh button references
+                                    let editBtn = document.getElementById('editBtn');
+                                    let addBtn = document.getElementById('addBtn');
+                                    let deleteBtn = document.getElementById('deleteBtn');
+                                    
+                                    editBtn.innerHTML = '<i class="fas fa-times"></i>';
+                                    editBtn.classList.add('editing');
+                                    editBtn.title = 'Cancel editing';
+                                    
+                                    // Update add button to show it's for saving now
+                                    addBtn.innerHTML = '<i class="fas fa-save"></i>';
+                                    addBtn.title = 'Save changes';
+                                    addBtn.classList.add('btn-update');
+                                    
+                                    // Disable delete button while in edit mode
+                                    deleteBtn.classList.add('btn-disabled');
+                                    deleteBtn.title = 'Cannot delete while editing';
+                                    
+                                    // Load narrative data into form
+                                    loadNarrativeForEdit(narrativeId);
+                                } else if (actionType === 'delete') {
+                                    // Call the function to show the delete confirmation
+                                    deleteNarrative();
+                                }
+                            }
+                        });
+                    }
                 }, { once: true }); // Use once: true to ensure it only gets added once
             }
 
@@ -3917,7 +3879,7 @@ if($isCentral):
                 form.reset();
                 currentNarrativeId = null;
                 window.currentNarrativeId = null;
-                narrativeIdField.value = '0';
+                document.getElementById('narrative_id').value = '0';
                 
                 // Reset buttons
                 editBtn.innerHTML = '<i class="fas fa-edit"></i>';
@@ -3949,6 +3911,22 @@ if($isCentral):
                     sessionStorage.removeItem('uploadedImages');
                 }
                 
+                // Reset the title field - remove readonly attribute and the explanatory note
+                const titleSelect = document.getElementById('title');
+                if (titleSelect) {
+                    titleSelect.removeAttribute('readonly');
+                    titleSelect.classList.remove('bg-light');
+                    
+                    // Remove the explanatory note if it exists
+                    const titleFormGroup = titleSelect.closest('.form-group');
+                    if (titleFormGroup) {
+                        const readOnlyNote = titleFormGroup.querySelector('.form-text.text-muted');
+                        if (readOnlyNote) {
+                            readOnlyNote.remove();
+                        }
+                    }
+                }
+                
                 // For non-central users, restore their campus
                 if (!isCentral && document.getElementById('campus_override')) {
                     const campusValue = document.getElementById('campus_override').value;
@@ -3959,17 +3937,17 @@ if($isCentral):
                 } else {
                     // For central users, just reset the dropdowns
                     const campusSelect = document.getElementById('campus');
-                    if (campusSelect.options.length > 0) {
+                    if (campusSelect && campusSelect.options.length > 0) {
                         campusSelect.selectedIndex = 0;
                     }
                     
                     const yearSelect = document.getElementById('year');
-                    if (yearSelect.options.length > 0) {
+                    if (yearSelect && yearSelect.options.length > 0) {
                         yearSelect.selectedIndex = 0;
                     }
                     
-                    const titleSelect = document.getElementById('title');
-                    if (titleSelect.options.length > 0) {
+                    // Title select already handled above
+                    if (titleSelect && titleSelect.options.length > 0) {
                         titleSelect.selectedIndex = 0;
                     }
                 }
@@ -4018,15 +3996,50 @@ if($isCentral):
                             }
                             
                             // Add new options
-                            response.data.forEach(title => {
+                            response.data.forEach(activity => {
                                 const option = document.createElement('option');
-                                option.value = title;
-                                option.textContent = title;
+                                // Check if activity is an object (new format) or string (old format)
+                                if (typeof activity === 'object' && activity !== null) {
+                                    option.value = activity.title;
+                                    option.textContent = activity.title;
+                                    
+                                    // Add red color to activities that already have narratives
+                                    if (activity.has_narrative) {
+                                        option.style.color = 'red';
+                                        option.setAttribute('data-has-narrative', 'true');
+                                    }
+                                } else {
+                                    // Handle legacy format (string)
+                                    option.value = activity;
+                                    option.textContent = activity;
+                                }
+                                
                                 titleSelect.appendChild(option);
                             });
                             
                             // Add change event listener to title dropdown
                             titleSelect.addEventListener('change', loadActivityDetails);
+                            
+                            // Add event listener to prevent selection of options with narratives
+                            titleSelect.addEventListener('change', function(e) {
+                                const selectedOption = this.options[this.selectedIndex];
+                                if (selectedOption.getAttribute('data-has-narrative') === 'true') {
+                                    // Prevent selection and show a message
+                                    e.preventDefault();
+                                    this.value = ''; // Reset to default option
+                                    
+                                    // Show a notification
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Selection Not Allowed',
+                                        text: 'This activity already has a narrative and cannot be selected.',
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
+                            });
                             
                             if (typeof callback === 'function') callback();
                         } else {
@@ -4199,10 +4212,24 @@ if($isCentral):
                             }
                             
                             // Add new options
-                            response.data.forEach(title => {
+                            response.data.forEach(activity => {
                                 const option = document.createElement('option');
-                                option.value = title;
-                                option.textContent = title;
+                                // Check if activity is an object (new format) or string (old format)
+                                if (typeof activity === 'object' && activity !== null) {
+                                    option.value = activity.title;
+                                    option.textContent = activity.title;
+                                    
+                                    // Add red color to activities that already have narratives
+                                    if (activity.has_narrative) {
+                                        option.style.color = 'red';
+                                        option.setAttribute('data-has-narrative', 'true');
+                                    }
+                                } else {
+                                    // Handle legacy format (string)
+                                    option.value = activity;
+                                    option.textContent = activity;
+                                }
+                                
                                 titleSelect.appendChild(option);
                             });
                             
@@ -4561,223 +4588,384 @@ if($isCentral):
         
         // Update loadNarrativeForEdit function to handle the new evaluation data format
         function loadNarrativeForEdit(narrativeId) {
-            // Existing code...
+            // Show loading indicator
+            const saveStatus = document.getElementById('save-status');
+            saveStatus.innerHTML = '<div class="d-flex align-items-center"><div class="spinner-border spinner-border-sm text-primary me-2" role="status"><span class="visually-hidden">Loading...</span></div><span>Loading narrative data...</span></div>';
             
-            // Add this to the success callback where form fields are populated
-            if (response.success) {
-                // Existing field population...
-                
-                // Handle evaluation data - parse JSON from evaluation field
-                try {
-                    if (narrative.evaluation) {
-                        const evalData = JSON.parse(narrative.evaluation);
-                        
-                        // Check for new format (activity and timeliness properties)
-                        if (evalData.activity) {
-                            // Handle new format
-                            
-                            // Populate activity ratings
-                            if (evalData.activity["Excellent"]) {
-                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
-                                    evalData.activity["Excellent"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
-                                    evalData.activity["Excellent"]["Others"] || 0;
-                            }
-                            
-                            if (evalData.activity["Very Satisfactory"]) {
-                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
-                                    evalData.activity["Very Satisfactory"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
-                                    evalData.activity["Very Satisfactory"]["Others"] || 0;
-                            }
-                            
-                            if (evalData.activity["Satisfactory"]) {
-                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
-                                    evalData.activity["Satisfactory"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
-                                    evalData.activity["Satisfactory"]["Others"] || 0;
-                            }
-                            
-                            if (evalData.activity["Fair"]) {
-                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
-                                    evalData.activity["Fair"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
-                                    evalData.activity["Fair"]["Others"] || 0;
-                            }
-                            
-                            if (evalData.activity["Poor"]) {
-                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
-                                    evalData.activity["Poor"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
-                                    evalData.activity["Poor"]["Others"] || 0;
-                            }
-                            
-                            // Populate timeliness ratings if available
-                            if (evalData.timeliness) {
-                                if (evalData.timeliness["Excellent"]) {
-                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
-                                        evalData.timeliness["Excellent"]["BatStateU"] || 0;
-                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
-                                        evalData.timeliness["Excellent"]["Others"] || 0;
-                                }
-                                
-                                if (evalData.timeliness["Very Satisfactory"]) {
-                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
-                                        evalData.timeliness["Very Satisfactory"]["BatStateU"] || 0;
-                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
-                                        evalData.timeliness["Very Satisfactory"]["Others"] || 0;
-                                }
-                                
-                                if (evalData.timeliness["Satisfactory"]) {
-                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
-                                        evalData.timeliness["Satisfactory"]["BatStateU"] || 0;
-                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
-                                        evalData.timeliness["Satisfactory"]["Others"] || 0;
-                                }
-                                
-                                if (evalData.timeliness["Fair"]) {
-                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
-                                        evalData.timeliness["Fair"]["BatStateU"] || 0;
-                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
-                                        evalData.timeliness["Fair"]["Others"] || 0;
-                                }
-                                
-                                if (evalData.timeliness["Poor"]) {
-                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
-                                        evalData.timeliness["Poor"]["BatStateU"] || 0;
-                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
-                                        evalData.timeliness["Poor"]["Others"] || 0;
-                                }
-                            }
-                        } 
-                        // Handle old format (ratings and timeliness properties)
-                        else if (evalData.ratings) {
-                            // Populate activity ratings
-                            if (evalData.ratings.excellent) {
-                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
-                                    evalData.ratings.excellent.batstateu || 0;
-                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
-                                    evalData.ratings.excellent.others || 0;
-                            }
-                            
-                            if (evalData.ratings.very_satisfactory) {
-                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
-                                    evalData.ratings.very_satisfactory.batstateu || 0;
-                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
-                                    evalData.ratings.very_satisfactory.others || 0;
-                            }
-                            
-                            if (evalData.ratings.satisfactory) {
-                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
-                                    evalData.ratings.satisfactory.batstateu || 0;
-                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
-                                    evalData.ratings.satisfactory.others || 0;
-                            }
-                            
-                            if (evalData.ratings.fair) {
-                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
-                                    evalData.ratings.fair.batstateu || 0;
-                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
-                                    evalData.ratings.fair.others || 0;
-                            }
-                            
-                            if (evalData.ratings.poor) {
-                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
-                                    evalData.ratings.poor.batstateu || 0;
-                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
-                                    evalData.ratings.poor.others || 0;
-                            }
-                            
-                            // Populate timeliness ratings if available
-                            if (evalData.timeliness) {
-                                if (evalData.timeliness.excellent) {
-                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
-                                        evalData.timeliness.excellent.batstateu || 0;
-                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
-                                        evalData.timeliness.excellent.others || 0;
-                                }
-                                
-                                if (evalData.timeliness.very_satisfactory) {
-                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
-                                        evalData.timeliness.very_satisfactory.batstateu || 0;
-                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
-                                        evalData.timeliness.very_satisfactory.others || 0;
-                                }
-                                
-                                if (evalData.timeliness.satisfactory) {
-                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
-                                        evalData.timeliness.satisfactory.batstateu || 0;
-                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
-                                        evalData.timeliness.satisfactory.others || 0;
-                                }
-                                
-                                if (evalData.timeliness.fair) {
-                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
-                                        evalData.timeliness.fair.batstateu || 0;
-                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
-                                        evalData.timeliness.fair.others || 0;
-                                }
-                                
-                                if (evalData.timeliness.poor) {
-                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
-                                        evalData.timeliness.poor.batstateu || 0;
-                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
-                                        evalData.timeliness.poor.others || 0;
-                                }
-                            }
-                        }
-                        // Handle direct object format (Excellent, Very Satisfactory, etc.)
-                        else if (evalData["Excellent"] || evalData["Fair"] || evalData["Poor"] || evalData["Satisfactory"] || evalData["Very Satisfactory"]) {
-                            // This is the simplest format with just the ratings
-                            if (evalData["Excellent"]) {
-                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
-                                    evalData["Excellent"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
-                                    evalData["Excellent"]["Others"] || 0;
-                            }
-                            
-                            if (evalData["Very Satisfactory"]) {
-                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
-                                    evalData["Very Satisfactory"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
-                                    evalData["Very Satisfactory"]["Others"] || 0;
-                            }
-                            
-                            if (evalData["Satisfactory"]) {
-                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
-                                    evalData["Satisfactory"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
-                                    evalData["Satisfactory"]["Others"] || 0;
-                            }
-                            
-                            if (evalData["Fair"]) {
-                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
-                                    evalData["Fair"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
-                                    evalData["Fair"]["Others"] || 0;
-                            }
-                            
-                            if (evalData["Poor"]) {
-                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
-                                    evalData["Poor"]["BatStateU"] || 0;
-                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
-                                    evalData["Poor"]["Others"] || 0;
-                            }
-                        }
-                        
-                        // Recalculate totals
-                        calculateTotals();
-                        calculateTimelinessTotal();
+            // Add loading overlay to form
+            const formContainer = document.querySelector('.card-body');
+            const overlay = document.createElement('div');
+            overlay.className = 'position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center';
+            overlay.style.backgroundColor = 'rgba(0,0,0,0.1)';
+            overlay.style.zIndex = '10';
+            overlay.style.borderRadius = 'inherit';
+            overlay.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+            overlay.id = 'form-loading-overlay';
+            formContainer.style.position = 'relative';
+            formContainer.appendChild(overlay);
+            
+            $.ajax({
+                url: 'narrative_handler.php',
+                type: 'POST',
+                data: { 
+                    action: 'get_single',
+                    id: narrativeId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Remove loading overlay
+                    const overlay = document.getElementById('form-loading-overlay');
+                    if (overlay) {
+                        overlay.remove();
                     }
-                } catch (e) {
-                    console.error("Error parsing evaluation data:", e);
-                    // If there's an error, just set the raw value to the hidden field
-                    document.getElementById('evaluation').value = narrative.evaluation || '';
+                    
+                    // Clear status message
+                    saveStatus.innerHTML = '';
+                    
+                    if (response.success) {
+                        const narrative = response.data;
+                        console.log("Loaded narrative data:", narrative);
+                        
+                        // First populate the campus dropdown
+                        const campusSelect = document.getElementById('campus');
+                        campusSelect.value = narrative.campus;
+                        
+                        // Store the narrative ID globally
+                        window.currentNarrativeId = narrativeId;
+                        document.getElementById('narrative_id').value = narrativeId;
+                        
+                        // Then load years for this campus
+                        loadYearsForCampus(narrative.campus, function() {
+                            // Once years are loaded, set the year
+                            document.getElementById('year').value = narrative.year;
+                            
+                            // Then load activities for this campus and year
+                            loadActivitiesForCampusAndYear(function() {
+                                // Once activities are loaded, set the title
+                                const titleSelect = document.getElementById('title');
+                                // Handle case where title might be an object
+                                titleSelect.value = narrative.title;
+                                // Make the title field read-only in edit mode
+                                titleSelect.setAttribute('readonly', 'readonly');
+                                titleSelect.classList.add('bg-light');
+                                titleSelect.style.opacity = '0.8';
+                                titleSelect.style.color = '#333'; // Darker color that works in both light and dark mode
+                                titleSelect.style.borderColor = '#6c757d'; // Grey border to indicate read-only
+                                // Add a visual indicator that it's read-only
+                                titleSelect.style.cursor = 'not-allowed';
+                                // Add a note about read-only status
+                                const titleFormGroup = titleSelect.closest('.form-group') || titleSelect.closest('.mb-3') || titleSelect.parentElement;
+                                // Only add the note if the parent element exists
+                                if (titleFormGroup) {
+                                    // Only add the note if it doesn't already exist
+                                    if (!titleFormGroup.querySelector('.form-text.text-muted')) {
+                                        const readOnlyNote = document.createElement('small');
+                                        readOnlyNote.className = 'form-text text-muted';
+                                        readOnlyNote.textContent = 'Activity cannot be changed in edit mode';
+                                        titleFormGroup.appendChild(readOnlyNote);
+                                    }
+                                }
+                                
+                                // Populate the rest of the form fields
+                                document.getElementById('background').value = narrative.background || '';
+                                document.getElementById('participants').value = narrative.participants || '';
+                                document.getElementById('topics').value = narrative.topics || '';
+                                document.getElementById('results').value = narrative.results || '';
+                                document.getElementById('lessons').value = narrative.lessons || '';
+                                document.getElementById('whatWorked').value = narrative.what_worked || '';
+                                document.getElementById('issues').value = narrative.issues || '';
+                                document.getElementById('recommendations').value = narrative.recommendations || '';
+                                document.getElementById('psAttribution').value = narrative.ps_attribution || '';
+                                document.getElementById('evaluation').value = narrative.evaluation || '';
+                                document.getElementById('photoCaption').value = narrative.photo_caption || '';
+                                document.getElementById('genderIssue').value = narrative.gender_issue || '';
+                                
+                                // Scroll to top of form
+                                document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                
+                                // Clear existing photo previews
+                                const previewContainer = document.getElementById('photoPreviewContainer');
+                                previewContainer.innerHTML = '';
+                                
+                                // Show existing photo previews if available
+                                // Ensure photoArray is an array by converting from string if needed
+                                let photoArray = [];
+                                if (typeof narrative.photo_paths === 'string' && narrative.photo_paths) {
+                                    try {
+                                        photoArray = JSON.parse(narrative.photo_paths);
+                                    } catch (e) {
+                                        console.warn('Failed to parse photo_paths as JSON:', e);
+                                        photoArray = [];
+                                    }
+                                } else if (Array.isArray(narrative.photo_paths)) {
+                                    photoArray = narrative.photo_paths;
+                                }
+                                
+                                // Add the main photo path if it's not already included
+                                if (narrative.photo_path && !photoArray.includes(narrative.photo_path)) {
+                                    photoArray.push(narrative.photo_path);
+                                }
+                                
+                                console.log("Photo paths:", photoArray);
+                                
+                                if (photoArray.length > 0) {
+                                    previewUploadedImages(photoArray);
+                                }
+                                
+                                // Process evaluation data
+                                try {
+                                    if (narrative.evaluation) {
+                                        const evalData = JSON.parse(narrative.evaluation);
+                                        console.log("Evaluation data:", evalData);
+                                        
+                                        // Check for new format (activity and timeliness properties)
+                                        if (evalData.activity) {
+                                            // Handle new format
+                                            
+                                            // Populate activity ratings
+                                            if (evalData.activity["Excellent"]) {
+                                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                    evalData.activity["Excellent"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                                    evalData.activity["Excellent"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData.activity["Very Satisfactory"]) {
+                                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                    evalData.activity["Very Satisfactory"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                                    evalData.activity["Very Satisfactory"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData.activity["Satisfactory"]) {
+                                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                    evalData.activity["Satisfactory"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                    evalData.activity["Satisfactory"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData.activity["Fair"]) {
+                                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                    evalData.activity["Fair"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                                    evalData.activity["Fair"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData.activity["Poor"]) {
+                                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                    evalData.activity["Poor"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                                    evalData.activity["Poor"]["Others"] || 0;
+                                            }
+                                            
+                                            // Populate timeliness ratings if available
+                                            if (evalData.timeliness) {
+                                                if (evalData.timeliness["Excellent"]) {
+                                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness["Excellent"]["BatStateU"] || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
+                                                        evalData.timeliness["Excellent"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness["Very Satisfactory"]) {
+                                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness["Very Satisfactory"]["BatStateU"] || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
+                                                        evalData.timeliness["Very Satisfactory"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness["Satisfactory"]) {
+                                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness["Satisfactory"]["BatStateU"] || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                        evalData.timeliness["Satisfactory"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness["Fair"]) {
+                                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness["Fair"]["BatStateU"] || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
+                                                        evalData.timeliness["Fair"]["Others"] || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness["Poor"]) {
+                                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness["Poor"]["BatStateU"] || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
+                                                        evalData.timeliness["Poor"]["Others"] || 0;
+                                                }
+                                            }
+                                        } 
+                                        // Handle old format (ratings and timeliness properties)
+                                        else if (evalData.ratings) {
+                                            // Populate activity ratings
+                                            if (evalData.ratings.excellent) {
+                                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                    evalData.ratings.excellent.batstateu || 0;
+                                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                                    evalData.ratings.excellent.others || 0;
+                                            }
+                                            
+                                            if (evalData.ratings.very_satisfactory) {
+                                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                    evalData.ratings.very_satisfactory.batstateu || 0;
+                                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                                    evalData.ratings.very_satisfactory.others || 0;
+                                            }
+                                            
+                                            if (evalData.ratings.satisfactory) {
+                                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                    evalData.ratings.satisfactory.batstateu || 0;
+                                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                    evalData.ratings.satisfactory.others || 0;
+                                            }
+                                            
+                                            if (evalData.ratings.fair) {
+                                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                    evalData.ratings.fair.batstateu || 0;
+                                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                                    evalData.ratings.fair.others || 0;
+                                            }
+                                            
+                                            if (evalData.ratings.poor) {
+                                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                    evalData.ratings.poor.batstateu || 0;
+                                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                                    evalData.ratings.poor.others || 0;
+                                            }
+                                            
+                                            // Populate timeliness ratings if available
+                                            if (evalData.timeliness) {
+                                                if (evalData.timeliness.excellent) {
+                                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness.excellent.batstateu || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="excellent"][data-col="others"]').value = 
+                                                        evalData.timeliness.excellent.others || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness.very_satisfactory) {
+                                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness.very_satisfactory.batstateu || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="very"][data-col="others"]').value = 
+                                                        evalData.timeliness.very_satisfactory.others || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness.satisfactory) {
+                                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness.satisfactory.batstateu || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                        evalData.timeliness.satisfactory.others || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness.fair) {
+                                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness.fair.batstateu || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="fair"][data-col="others"]').value = 
+                                                        evalData.timeliness.fair.others || 0;
+                                                }
+                                                
+                                                if (evalData.timeliness.poor) {
+                                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                        evalData.timeliness.poor.batstateu || 0;
+                                                    document.querySelector('.timeliness-rating[data-row="poor"][data-col="others"]').value = 
+                                                        evalData.timeliness.poor.others || 0;
+                                                }
+                                            }
+                                        }
+                                        // Handle direct object format (Excellent, Very Satisfactory, etc.)
+                                        else if (evalData["Excellent"] || evalData["Fair"] || evalData["Poor"] || evalData["Satisfactory"] || evalData["Very Satisfactory"]) {
+                                            // This is the simplest format with just the ratings
+                                            if (evalData["Excellent"]) {
+                                                document.querySelector('.activity-rating[data-row="excellent"][data-col="batstateu"]').value = 
+                                                    evalData["Excellent"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="excellent"][data-col="others"]').value = 
+                                                    evalData["Excellent"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData["Very Satisfactory"]) {
+                                                document.querySelector('.activity-rating[data-row="very"][data-col="batstateu"]').value = 
+                                                    evalData["Very Satisfactory"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="very"][data-col="others"]').value = 
+                                                    evalData["Very Satisfactory"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData["Satisfactory"]) {
+                                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="batstateu"]').value = 
+                                                    evalData["Satisfactory"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="satisfactory"][data-col="others"]').value = 
+                                                    evalData["Satisfactory"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData["Fair"]) {
+                                                document.querySelector('.activity-rating[data-row="fair"][data-col="batstateu"]').value = 
+                                                    evalData["Fair"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="fair"][data-col="others"]').value = 
+                                                    evalData["Fair"]["Others"] || 0;
+                                            }
+                                            
+                                            if (evalData["Poor"]) {
+                                                document.querySelector('.activity-rating[data-row="poor"][data-col="batstateu"]').value = 
+                                                    evalData["Poor"]["BatStateU"] || 0;
+                                                document.querySelector('.activity-rating[data-row="poor"][data-col="others"]').value = 
+                                                    evalData["Poor"]["Others"] || 0;
+                                            }
+                                        }
+                                        
+                                        // Recalculate totals
+                                        calculateTotals();
+                                        calculateTimelinessTotal();
+                                    }
+                                } catch (e) {
+                                    console.error("Error parsing evaluation data:", e);
+                                    // If there's an error, just set the raw value to the hidden field
+                                    document.getElementById('evaluation').value = narrative.evaluation || '';
+                                }
+                                
+                                // After populating data, enable photo upload if both year and activity are set
+                                updatePhotoUploadState();
+                            });
+                        });
+                    } else {
+                        saveStatus.innerHTML = '<span class="badge bg-danger">Error: Failed to load data</span>';
+                        setTimeout(() => { saveStatus.innerHTML = ''; }, 3000);
+                        
+                        console.error("Error loading narrative:", response.message);
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load narrative data',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    // Remove loading overlay
+                    const overlay = document.getElementById('form-loading-overlay');
+                    if (overlay) {
+                        overlay.remove();
+                    }
+                    
+                    // Show error message
+                    saveStatus.innerHTML = '<span class="badge bg-danger">Server error</span>';
+                    setTimeout(() => { saveStatus.innerHTML = ''; }, 3000);
+                    
+                    console.error("AJAX Error:", xhr.responseText);
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Server error while loading narrative data',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                 }
-                
-                // After populating data, enable photo upload if both year and activity are set
-                updatePhotoUploadState();
-            }
+            });
         }
         
         // Update showNarrativeDetails to display the new evaluation table format
@@ -5113,40 +5301,98 @@ if($isCentral):
         }
         
         // Function to reset the form
-        function resetForm(clearAll = true) {
-            // Reset all fields
-            document.getElementById('narrative-form').reset();
-            
-            // Clear the photo preview container
-            document.getElementById('photoPreviewContainer').innerHTML = '';
-            
-            // Reset the current narrative ID
+        function resetForm() {
+            form.reset();
+            currentNarrativeId = null;
             window.currentNarrativeId = null;
             document.getElementById('narrative_id').value = '0';
             
-            // Close any open details panel
-            if (document.getElementById('details-panel').classList.contains('show')) {
-                document.getElementById('details-toggle').click();
+            // Reset buttons
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            editBtn.classList.remove('editing');
+            
+            addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+            addBtn.classList.remove('btn-update');
+            
+            // Keep delete button enabled
+            deleteBtn.classList.remove('btn-disabled');
+            
+            // Clear photo previews completely
+            const previewContainer = document.getElementById('photoPreviewContainer');
+            if (previewContainer) {
+                previewContainer.innerHTML = '';
             }
             
-            // Clear any file input
+            // Clear the file input
             const photoInput = document.getElementById('photoUpload');
-            if (photoInput) photoInput.value = '';
-            
-            // If specified, also clear temporary uploads on the server
-            if (clearAll) {
-                clearTemporaryUploads();
+            if (photoInput) {
+                photoInput.value = '';
             }
             
-            // Reset edit state
-            window.isEditing = false;
+            // Clear any stored image data or cached paths
+            window.uploadedImagePaths = [];
             
-            // Reset button states
-            updateButtonStates();
+            // Clear session storage for uploaded images
+            if (window.sessionStorage) {
+                sessionStorage.removeItem('uploadedImages');
+            }
+            
+            // Reset the title field - remove readonly attribute and the explanatory note
+            const titleSelect = document.getElementById('title');
+            if (titleSelect) {
+                titleSelect.removeAttribute('readonly');
+                titleSelect.classList.remove('bg-light');
+                
+                // Remove the explanatory note if it exists
+                const titleFormGroup = titleSelect.closest('.form-group');
+                if (titleFormGroup) {
+                    const readOnlyNote = titleFormGroup.querySelector('.form-text.text-muted');
+                    if (readOnlyNote) {
+                        readOnlyNote.remove();
+                    }
+                }
+            }
+            
+            // For non-central users, restore their campus
+            if (!isCentral && document.getElementById('campus_override')) {
+                const campusValue = document.getElementById('campus_override').value;
+                document.getElementById('campus').value = campusValue;
+                
+                // Reload years based on campus
+                loadYearsForCampus(campusValue);
+            } else {
+                // For central users, just reset the dropdowns
+                const campusSelect = document.getElementById('campus');
+                if (campusSelect && campusSelect.options.length > 0) {
+                    campusSelect.selectedIndex = 0;
+                }
+                
+                const yearSelect = document.getElementById('year');
+                if (yearSelect && yearSelect.options.length > 0) {
+                    yearSelect.selectedIndex = 0;
+                }
+                
+                // Title select already handled above
+                if (titleSelect && titleSelect.options.length > 0) {
+                    titleSelect.selectedIndex = 0;
+                }
+            }
+            
+            // Clear any status messages
+            const saveStatus = document.getElementById('save-status');
+            if (saveStatus) {
+                saveStatus.innerHTML = '';
+            }
+            
+            // Update photo upload state (should disable it since year/activity are reset)
+            updatePhotoUploadState();
         }
 
         // Document ready function
         $(document).ready(function() {
+            // Fix the title form group issue
+            fixTitleFormGroupIssue();
+            
             // Clear any old temporary uploads when the page loads
             clearTemporaryUploads();
             
@@ -5156,11 +5402,206 @@ if($isCentral):
             // Initialize evaluation table calculations
             setupEvaluationTableCalculations();
             
-            // Add a clear uploads button click handler
-            $('#clearUploadsBtn').on('click', function() {
-                clearTemporaryUploads();
-            });
+            // Add global event listener to prevent selecting options with narratives
+            const titleSelect = document.getElementById('title');
+            if (titleSelect) {
+                titleSelect.addEventListener('change', preventNarrativeSelection, true);
+            }
         });
+
+        // Function to filter narratives by campus
+        function filterNarrativesByCampus(campus, action) {
+            console.log(`Filtering narratives by campus: ${campus}, action: ${action}`);
+            
+            // Store the action for later use
+            window.currentListAction = action || window.currentListAction || 'view';
+            
+            if (!campus) {
+                // If no campus selected, show all narratives
+                loadNarrativesAndShowList('', window.currentListAction);
+                return;
+            }
+            
+            // Show loading indicator
+            const tableBody = document.querySelector('#narrativeListModal .table tbody');
+            if (tableBody) {
+                tableBody.innerHTML = '<tr><td colspan="4" class="text-center"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Loading...</td></tr>';
+            }
+            
+            // Filter the narratives by campus
+            $.ajax({
+                url: 'narrative_handler.php',
+                type: 'POST',
+                data: { 
+                    action: 'read',
+                    campus: campus
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        narrativeData = response.data || [];
+                        
+                        // Check if we have data
+                        if (narrativeData.length === 0) {
+                            if (tableBody) {
+                                tableBody.innerHTML = '<tr><td colspan="4" class="text-center">No narratives found for this campus</td></tr>';
+                            }
+                        } else {
+                            // Update the table body with filtered data
+                            updateNarrativeTableBody(window.currentListAction);
+                        }
+                    } else {
+                        console.error("Error loading narratives:", response.message);
+                        narrativeData = [];
+                        if (tableBody) {
+                            tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading narratives</td></tr>';
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    console.error("AJAX Error:", xhr.responseText);
+                    narrativeData = [];
+                    if (tableBody) {
+                        tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Server error</td></tr>';
+                    }
+                }
+            });
+        }
+        
+        // Function to update the narrative table body with current data
+        function updateNarrativeTableBody(action) {
+            console.log("Updating narrative table with action:", action);
+            const tableBody = document.querySelector('#narrativeListModal .table tbody');
+            if (!tableBody) return;
+            
+            // Use the provided action or fall back to the stored global action
+            const currentAction = action || window.currentListAction || 'view';
+            
+            let html = '';
+            
+            // Create rows for each narrative
+            narrativeData.forEach(narrative => {
+                html += `
+                    <tr class="narrative-row" data-id="${narrative.id}" data-action="${currentAction}">
+                        <td>${narrative.title || 'Untitled'}</td>
+                        <td>${narrative.campus || 'N/A'}</td>
+                        <td>${narrative.year || 'N/A'}</td>
+                        <td>${narrative.created_at || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            
+            // Update the table body
+            tableBody.innerHTML = html;
+            
+            // Re-add click event listeners to rows
+            attachRowClickListeners();
+        }
+        
+        // Function to attach click event listeners to narrative rows
+        function attachRowClickListeners() {
+            console.log("Attaching click listeners to rows");
+            const rows = document.querySelectorAll('.narrative-row');
+            console.log(`Found ${rows.length} rows to attach listeners to`);
+            
+            rows.forEach(row => {
+                // Remove any existing click listeners to prevent duplicates
+                row.replaceWith(row.cloneNode(true));
+            });
+            
+            // Get the fresh nodes after cloning
+            document.querySelectorAll('.narrative-row').forEach(row => {
+                const narrativeId = row.getAttribute('data-id');
+                const actionType = row.getAttribute('data-action');
+                console.log(`Attaching listener to row with ID: ${narrativeId}, action: ${actionType}`);
+                
+                row.addEventListener('click', function(e) {
+                    console.log(`Row clicked! ID: ${narrativeId}, Action: ${actionType}`);
+                    
+                    // Close the list modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('narrativeListModal'));
+                    modal.hide();
+                    
+                    // Set current narrative ID
+                    currentNarrativeId = narrativeId;
+                    document.getElementById('narrative_id').value = narrativeId;
+                    window.currentNarrativeId = narrativeId;
+                    
+                    // Handle different actions
+                    if (actionType === 'view') {
+                        showNarrativeDetails(narrativeId);
+                    } else if (actionType === 'edit') {
+                        // Enter edit mode
+                        isEditing = true;
+                        window.isEditing = true;
+                        
+                        // Get fresh button references
+                        let editBtn = document.getElementById('editBtn');
+                        let addBtn = document.getElementById('addBtn');
+                        let deleteBtn = document.getElementById('deleteBtn');
+                        
+                        editBtn.innerHTML = '<i class="fas fa-times"></i>';
+                        editBtn.classList.add('editing');
+                        editBtn.title = 'Cancel editing';
+                        
+                        // Update add button to show it's for saving now
+                        addBtn.innerHTML = '<i class="fas fa-save"></i>';
+                        addBtn.title = 'Save changes';
+                        addBtn.classList.add('btn-update');
+                        
+                        // Disable delete button while in edit mode
+                        deleteBtn.classList.add('btn-disabled');
+                        deleteBtn.title = 'Cannot delete while editing';
+                        
+                        // Load narrative data into form
+                        loadNarrativeForEdit(narrativeId);
+                    } else if (actionType === 'delete') {
+                        // Call the function to show the delete confirmation
+                        deleteNarrative();
+                    }
+                });
+                
+                // Make the row look clickable with a pointer cursor
+                row.style.cursor = 'pointer';
+            });
+        }
+
+        // Fix for the title form group issue
+        function fixTitleFormGroupIssue() {
+            // Fix for the Cannot read properties of null error
+            const titleSelect = document.getElementById('title');
+            if (titleSelect) {
+                // Add a parent div with form-group class if it doesn't exist
+                if (!titleSelect.closest('.form-group') && !titleSelect.closest('.mb-3')) {
+                    const parent = titleSelect.parentElement;
+                    if (parent) {
+                        parent.classList.add('form-group');
+                    }
+                }
+            }
+        }
+
+        // Function to prevent selection of options with narratives
+        function preventNarrativeSelection(e) {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.getAttribute('data-has-narrative') === 'true') {
+                // Prevent selection and show a message
+                e.preventDefault();
+                this.value = ''; // Reset to default option
+                
+                // Show a notification
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Selection Not Allowed',
+                    text: 'This activity already has a narrative and cannot be selected.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                return false;
+            }
+        }
     </script>
     <script src="../js/approval-badge.js"></script>
     

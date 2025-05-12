@@ -827,7 +827,7 @@ function getCampuses() {
             
             if (!$tableResult || $tableResult->num_rows === 0) {
                 // Campuses table doesn't exist yet, return a default list
-                $campuses = ['Alangilan', 'Arasof-Nasugbu', 'Balayan', 'Lemery', 'Lipa', 'Lobo', 'Mabini', 'Malvar', 'Pablo Borbon', 'Rosario', 'San Juan'];
+                $campuses = ['Central', 'Alangilan', 'Arasof-Nasugbu', 'Balayan', 'Lemery', 'Lipa', 'Lobo', 'Mabini', 'Malvar', 'Pablo Borbon', 'Rosario', 'San Juan'];
                 echo json_encode(['success' => true, 'data' => $campuses]);
                 return;
             }
@@ -849,7 +849,7 @@ function getCampuses() {
             
             // If no campuses found in database, use default list
             if (empty($campuses)) {
-                $campuses = ['Alangilan', 'Arasof-Nasugbu', 'Balayan', 'Lemery', 'Lipa', 'Lobo', 'Mabini', 'Malvar', 'Pablo Borbon', 'Rosario', 'San Juan'];
+                $campuses = ['Central', 'Alangilan', 'Arasof-Nasugbu', 'Balayan', 'Lemery', 'Lipa', 'Lobo', 'Mabini', 'Malvar', 'Pablo Borbon', 'Rosario', 'San Juan'];
             }
             
             echo json_encode(['success' => true, 'data' => $campuses]);
@@ -951,7 +951,7 @@ function getTitlesFromPPAS() {
         $tableCheckQuery = "SHOW TABLES LIKE 'ppas_forms'";
         $tableResult = $conn->query($tableCheckQuery);
         
-        $titles = [];
+        $activities = [];
         
         if ($tableResult && $tableResult->num_rows > 0) {
             // Build query based on filters
@@ -982,23 +982,55 @@ function getTitlesFromPPAS() {
             
             if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $titles[] = $row['activity'];
+                    // Check if this activity has a narrative
+                    $hasNarrative = false;
+                    
+                    // Check if narrative_entries table exists
+                    $narrativeTableCheckQuery = "SHOW TABLES LIKE 'narrative_entries'";
+                    $narrativeTableResult = $conn->query($narrativeTableCheckQuery);
+                    
+                    if ($narrativeTableResult && $narrativeTableResult->num_rows > 0) {
+                        // Check if this activity has a narrative entry
+                        $narrativeQuery = "SELECT COUNT(*) as count FROM narrative_entries WHERE title = ? AND campus = ? AND year = ?";
+                        $narrativeStmt = $conn->prepare($narrativeQuery);
+                        $narrativeStmt->bind_param("sss", $row['activity'], $campus, $year);
+                        $narrativeStmt->execute();
+                        $narrativeResult = $narrativeStmt->get_result();
+                        
+                        if ($narrativeResult && $narrativeResult->num_rows > 0) {
+                            $narrativeRow = $narrativeResult->fetch_assoc();
+                            $hasNarrative = ($narrativeRow['count'] > 0);
+                        }
+                    }
+                    
+                    // Add activity with has_narrative flag
+                    $activities[] = [
+                        'title' => $row['activity'],
+                        'has_narrative' => $hasNarrative
+                    ];
                 }
             }
         }
         
         // Add default titles if no results
-        if (empty($titles)) {
-            $titles = [
+        if (empty($activities)) {
+            $defaultTitles = [
                 'Gender and Development Training',
                 'Women Empowerment Workshop',
                 'Gender Sensitivity Seminar',
                 'Gender Integration Workshop',
                 'Diversity and Inclusion Conference'
             ];
+            
+            foreach ($defaultTitles as $title) {
+                $activities[] = [
+                    'title' => $title,
+                    'has_narrative' => false
+                ];
+            }
         }
         
-        echo json_encode(['success' => true, 'data' => $titles]);
+        echo json_encode(['success' => true, 'data' => $activities]);
         
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);

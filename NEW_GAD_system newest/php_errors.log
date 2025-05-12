@@ -341,3 +341,44 @@
 [08-May-2025 06:02:11 UTC] YEAR[0]: 2028 for campus: Lipa
 [08-May-2025 06:02:11 UTC] YEAR[1]: 2026 for campus: Lipa
 [08-May-2025 06:02:11 UTC] FINAL RESPONSE: {"success":true,"years":[2028,2026],"campus":"Lipa","username":"Lipa","message":"Years retrieved successfully","debug_time":"2025-05-08 06:02:11","record_count":8}
+[12-May-2025 03:39:05 UTC] ************************ GET_YEARS.PHP CALLED ************************
+[12-May-2025 03:39:05 UTC] SESSION in get_years.php: Array
+(
+    [username] => Lipa
+    [user_id] => 1
+    [campus] => Lipa
+)
+
+[12-May-2025 03:39:05 UTC] GET in get_years.php: Array
+(
+    [nocache] => 1747021145596
+    [request] => e35buj7nuuw
+)
+
+[12-May-2025 03:39:05 UTC] COOKIE in get_years.php: Array
+(
+    [PHPSESSID] => ldmkjr80vp7i4mecv61s1q9n5p
+)
+
+[12-May-2025 03:39:05 UTC] ####### CRITICAL CHECK: SESSION USERNAME = 'Lipa', USING CAMPUS = 'Lipa' #######
+[12-May-2025 03:39:05 UTC] Fetching years ONLY for logged in campus: Lipa (ignoring any overrides)
+[12-May-2025 03:39:05 UTC] FULL DATABASE CHECK - All campuses in ppas_forms table:
+[12-May-2025 03:39:05 UTC] CAMPUS COUNTS IN DATABASE:
+[12-May-2025 03:39:05 UTC] ===> CAMPUS: 'Alangilan' has 1 records
+[12-May-2025 03:39:05 UTC] ===> CAMPUS: 'Central' has 2 records
+[12-May-2025 03:39:05 UTC] ===> CAMPUS: 'Lipa' has 8 records
+[12-May-2025 03:39:05 UTC] ===> CAMPUS: 'Lobo' has 1 records
+[12-May-2025 03:39:05 UTC] DETAILED COUNT: Found 8 records for campus 'Lipa' in ppas_forms table
+[12-May-2025 03:39:05 UTC] SAMPLE RECORDS FOR CAMPUS 'Lipa':
+[12-May-2025 03:39:05 UTC] RECORD: ID=1, CAMPUS='Lipa', YEAR=2026, QUARTER=Q1, ACTIVITY='Test Activity'
+[12-May-2025 03:39:05 UTC] RECORD: ID=3, CAMPUS='Lipa', YEAR=2026, QUARTER=Q1, ACTIVITY='Activity A'
+[12-May-2025 03:39:05 UTC] RECORD: ID=4, CAMPUS='Lipa', YEAR=2028, QUARTER=Q1, ACTIVITY='Activity B'
+[12-May-2025 03:39:05 UTC] RECORD: ID=5, CAMPUS='Lipa', YEAR=2028, QUARTER=Q3, ACTIVITY='Activity C'
+[12-May-2025 03:39:05 UTC] RECORD: ID=6, CAMPUS='Lipa', YEAR=2028, QUARTER=Q1, ACTIVITY='Activity D'
+[12-May-2025 03:39:05 UTC] SQL Query: SELECT DISTINCT year FROM ppas_forms WHERE campus = ? ORDER BY year DESC with strict campus parameter: [Lipa]
+[12-May-2025 03:39:05 UTC] RAW DB FETCH: Found year '2028' for campus 'Lipa'
+[12-May-2025 03:39:05 UTC] RAW DB FETCH: Found year '2026' for campus 'Lipa'
+[12-May-2025 03:39:05 UTC] FETCH SUMMARY: Found 2 years for logged-in campus: Lipa
+[12-May-2025 03:39:05 UTC] YEAR[0]: 2028 for campus: Lipa
+[12-May-2025 03:39:05 UTC] YEAR[1]: 2026 for campus: Lipa
+[12-May-2025 03:39:05 UTC] FINAL RESPONSE: {"success":true,"years":[2028,2026],"campus":"Lipa","username":"Lipa","message":"Years retrieved successfully","debug_time":"2025-05-12 03:39:05","record_count":8}

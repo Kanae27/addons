@@ -2795,3 +2795,48 @@
               WHERE pf.campus = :campus 
               ORDER BY pf.year DESC with campus: Lipa
 [09-May-2025 06:17:43 UTC] Query returned 1 years
+[12-May-2025 03:39:20 UTC] Database config - Server: localhost, DB: gad_db, User: root
+[12-May-2025 03:39:20 UTC] Connected to database successfully
+[12-May-2025 03:39:20 UTC] Executing query: SELECT DISTINCT pf.year 
+              FROM gad_proposals gp
+              JOIN ppas_forms pf ON gp.ppas_form_id = pf.id
+              WHERE pf.campus = :campus 
+              ORDER BY pf.year DESC with campus: Lipa
+[12-May-2025 03:39:20 UTC] Query returned 1 years
+[12-May-2025 03:39:25 UTC] Using database: host=localhost, dbname=gad_db, user=root
+[12-May-2025 03:39:25 UTC] Parameters: proposal_id=30, campus=Lipa, year=2026, format=
+[12-May-2025 03:39:25 UTC] Database connection successful
+[12-May-2025 03:39:25 UTC] Executing query: 
+        SELECT 
+            gp.*,
+            pf.year,
+            pf.campus,
+            pf.location as venue,
+            pf.activity,
+            pf.students_male,
+            pf.students_female,
+            pf.faculty_male,
+            pf.faculty_female,
+            pf.total_internal_male,
+            pf.total_internal_female,
+            pf.external_type,
+            pf.external_male,
+            pf.external_female,
+            pf.total_male,
+            pf.total_female,
+            pf.total_beneficiaries,
+            CONCAT(
+                DATE_FORMAT(pf.start_date, '%M %d, %Y'),
+                ' to ',
+                DATE_FORMAT(pf.end_date, '%M %d, %Y')
+            ) as duration
+        FROM gad_proposals gp
+        JOIN ppas_forms pf ON gp.ppas_form_id = pf.id
+        WHERE gp.proposal_id = :proposal_id
+        AND pf.campus = :campus
+        AND pf.year = :year
+    
+[12-May-2025 03:39:25 UTC] Parameters: proposal_id=30, campus=Lipa, year=2026
+[12-May-2025 03:39:25 UTC] Found proposal: {"proposal_id":30,"ppas_form_id":1,"campus":"Lipa","mode_of_delivery":"FacetoFace","partner_office":"Partners","rationale":"Rationale","general_objectives":"General Objective","description":"The Daniel and Marilyn's General Merchandise Store Web System is a robust digital platform designed to streamline inventory management and enhance the customer shopping experience. This system integrates a user-friendly point-of-sale interface with cloud-based e-commerce functionalities, allowing real-time synchronization of stock data and transactions. By incorporating GCash as a payment option, it caters to the growing demand for cashless transactions, making purchases more convenient for customers. The design emphasizes role-based access control, ensuring that only authorized personnel can manage sensitive data and system operations. With compliance to ISO 21500 standards, the system maintains a high level of project management excellence and operational efficiency.\n\nAdditionally, the platform supports a dynamic admin dashboard that provides insightful analytics and sales reports, empowering business owners to make data-driven decisions. Customer profiles, purchase history, and product recommendations are seamlessly integrated, creating a personalized shopping experience. Built with scalability in mind, the system can accommodate future business expansions and additional features without disrupting current operations. Security protocols are strictly enforced, protecting both customer and store data from breaches and unauthorized access. Ultimately, the web system aims to elevate the overall functionality, reliability, and competitiveness of the store in a rapidly evolving digital marketplace.","budget_breakdown":"budget_breakdown","sustainability_plan":"To ensure the long-term success and viability of the Daniel and Marilyn\u2019s General Merchandise Store Web System, a comprehensive sustainability plan has been established. This plan focuses on maintaining system performance, reducing operational costs, and ensuring adaptability to future technological advancements. Regular system updates and maintenance schedules will be implemented to keep the platform secure, responsive, and compliant with the latest security protocols. Energy-efficient hosting solutions and optimized backend processes will be adopted to minimize the environmental impact of continuous system operation. Additionally, comprehensive training and documentation will be provided to staff, ensuring smooth day-to-day operations and reducing reliance on external technical support.\n\nThe sustainability strategy also includes continuous monitoring and evaluation mechanisms to assess the system\u2019s efficiency, reliability, and user satisfaction over time. Feedback loops from customers and staff will help guide future updates and feature enhancements. The integration of scalable cloud infrastructure ensures the system can grow alongside the business, supporting increased traffic, transactions, and data without service disruption. Partnerships with local tech providers and open-source communities will also be explored to promote innovation and cost-effective development. Through proactive planning, resource optimization, and stakeholder involvement, the web system is positioned to support the store\u2019s operations and goals well into the future.","project_leader_responsibilities":"[\"Project Leader Responsibilities 1\", \"Project Leader Responsibilities 2\", \"Project Leader Responsibilities 3\", \"Project Leader Responsibilities 4\", \"Project Leader Responsibilities 5\"]","assistant_leader_responsibilities":"[\"Assistant Project Leader Responsibilities 1\", \"Assistant Project Leader Responsibilities 2\", \"Assistant Project Leader Responsibilities 3\", \"Assistant Project Leader Responsibilities 4\", \"Assistant Project Leader Responsibilities 5\"]","staff_responsibilities":"[\"Project Staff Responsibilities 1\", \"Project Staff Responsibilities 2\", \"Project Staff Responsibilities3\", \"Project Staff Responsibilities 4\", \"Project Staff Responsibilities 5\"]","specific_objectives":"[\"Specific Objectives 1\", \"Specific Objectives 2\", \"Specific Objectives 3\"]","strategies":"[\"Strategies 1\", \"Strategies 2\", \"Strategies 3\"]","methods":"[[\"Activity Name 1\", [\"Activity Details 1\", \"Activity Details 2\"]], [\"Activity Name 2\", [\"Activity Details 1\"]]]","materials":"[\"Material 1\", \"Material 2\", \"Material 3\"]","workplan":"[[\"Work plan 11\", [\"2025-04-03\"]], [\"Work plan 2\", [\"2025-04-04\", \"2025-04-05\", \"2025-04-06\"]]]","monitoring_items":"[[\"Objectives 1\", \"Performance Indicators 1\", \"Baseline Data 1\", \"Performance Target 1\", \"Data Source 1\", \"Collection Method 1\", \"Frequency of Data Collection 1\", \"Office\/Persons Responsible 1\"], [\"Objectives 2\", \"Performance Indicators 2\", \"Baseline Data 2\", \"Performance Target 2\", \"Data Source 2\", \"Collection Method 2\", \"Frequency of Data Collection 2\", \"Office\/Persons Responsible 2\"]]","specific_plans":"[\"Specific Plans 1\", \"Specific Plans 2\", \"Specific Plans 3\"]","created_at":"2025-04-07 13:38:32","updated_at":"2025-05-08 11:51:25","request_type":"client","type":"project","year":2026,"venue":"Test Location","activity":"Test Activity","students_male":1,"students_female":1,"faculty_male":2,"faculty_female":2,"total_internal_male":3,"total_internal_female":3,"external_type":"0","external_male":1,"external_female":1,"total_male":4,"total_female":4,"total_beneficiaries":8,"duration":"March 27, 2025 to March 27, 2025"}
+[12-May-2025 03:39:25 UTC] Found personnel: [{"personnel_id":117,"role":"Assistant Project Leader","name":"Elbert D. Nebres","gender":"male","academic_rank":"Instructor III"},{"personnel_id":132,"role":"Other Internal Participants","name":"Test","gender":"female","academic_rank":"Instructor III"},{"personnel_id":124,"role":"Project Leader","name":"Fryan Auric L. Valdez","gender":"male","academic_rank":"Instructor I"},{"personnel_id":132,"role":"Staff","name":"Test","gender":"female","academic_rank":"Instructor III"}]
+[12-May-2025 03:39:25 UTC] Personnel data: {"project_leaders":[{"personnel_id":124,"role":"Project Leader","name":"Fryan Auric L. Valdez","gender":"male","academic_rank":"Instructor I"}],"assistant_project_leaders":[{"personnel_id":117,"role":"Assistant Project Leader","name":"Elbert D. Nebres","gender":"male","academic_rank":"Instructor III"}],"project_staff":[{"personnel_id":132,"role":"Staff","name":"Test","gender":"female","academic_rank":"Instructor III"}]}
