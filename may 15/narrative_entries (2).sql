@@ -1,0 +1,77 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 15, 2025 at 03:11 AM
+-- Server version: 8.0.31
+-- PHP Version: 8.2.0
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `gad_db`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `narrative_entries`
+--
+
+DROP TABLE IF EXISTS `narrative_entries`;
+CREATE TABLE IF NOT EXISTS `narrative_entries` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `campus` varchar(255) NOT NULL,
+  `year` varchar(10) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `background` text,
+  `participants` text,
+  `topics` text,
+  `results` text,
+  `lessons` text,
+  `what_worked` text,
+  `issues` text,
+  `recommendations` text,
+  `ps_attribution` varchar(255) DEFAULT NULL,
+  `evaluation` text,
+  `activity_ratings` text,
+  `timeliness_ratings` text,
+  `photo_path` varchar(255) DEFAULT NULL,
+  `photo_paths` text,
+  `photo_caption` text,
+  `gender_issue` text,
+  `created_by` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` varchar(100) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `narrative_entries`
+--
+
+INSERT INTO `narrative_entries` (`id`, `campus`, `year`, `title`, `background`, `participants`, `topics`, `results`, `lessons`, `what_worked`, `issues`, `recommendations`, `ps_attribution`, `evaluation`, `activity_ratings`, `timeliness_ratings`, `photo_path`, `photo_paths`, `photo_caption`, `gender_issue`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
+(9, 'Lipa', '2026', 'Test Activity', 'fae', 'faf', 'wafw', 'ddwad', 'dwadaw', 'dwadwa', 'dwada', 'dawda2', '6006.40', '{\"activity\":{\"Excellent\":{\"BatStateU\":5,\"Others\":2},\"Very Satisfactory\":{\"BatStateU\":123,\"Others\":777},\"Satisfactory\":{\"BatStateU\":7,\"Others\":277},\"Fair\":{\"BatStateU\":23,\"Others\":2},\"Poor\":{\"BatStateU\":7,\"Others\":7}},\"timeliness\":{\"Excellent\":{\"BatStateU\":7,\"Others\":7},\"Very Satisfactory\":{\"BatStateU\":7,\"Others\":77},\"Satisfactory\":{\"BatStateU\":77,\"Others\":77},\"Fair\":{\"BatStateU\":7,\"Others\":8},\"Poor\":{\"BatStateU\":81,\"Others\":8}}}', '{\"Excellent\":{\"BatStateU\":5,\"Others\":2},\"Very Satisfactory\":{\"BatStateU\":123,\"Others\":777},\"Satisfactory\":{\"BatStateU\":7,\"Others\":277},\"Fair\":{\"BatStateU\":23,\"Others\":2},\"Poor\":{\"BatStateU\":7,\"Others\":7}}', '{\"Excellent\":{\"BatStateU\":7,\"Others\":7},\"Very Satisfactory\":{\"BatStateU\":7,\"Others\":77},\"Satisfactory\":{\"BatStateU\":77,\"Others\":77},\"Fair\":{\"BatStateU\":7,\"Others\":8},\"Poor\":{\"BatStateU\":81,\"Others\":8}}', 'photos/narrative_1746955903_0.jpg', '[\"photos\\/narrative_1746955903_0.jpg\"]', '55', 'Test 4', 'Lipa', '2025-05-11 09:30:55', 'Lipa', '2025-05-11 09:36:28'),
+(12, 'Lipa', '2028', 'Test Activity', '3', '33', '3', '3', '3', '3', '3', '32', '3200.80', '{\"activity\":{\"Excellent\":{\"BatStateU\":2,\"Others\":2},\"Very Satisfactory\":{\"BatStateU\":222,\"Others\":2},\"Satisfactory\":{\"BatStateU\":2,\"Others\":2},\"Fair\":{\"BatStateU\":22,\"Others\":2},\"Poor\":{\"BatStateU\":2,\"Others\":2}},\"timeliness\":{\"Excellent\":{\"BatStateU\":2,\"Others\":22},\"Very Satisfactory\":{\"BatStateU\":2,\"Others\":2},\"Satisfactory\":{\"BatStateU\":2,\"Others\":4},\"Fair\":{\"BatStateU\":4,\"Others\":4},\"Poor\":{\"BatStateU\":4,\"Others\":4}}}', '{\"Excellent\":{\"BatStateU\":2,\"Others\":2},\"Very Satisfactory\":{\"BatStateU\":222,\"Others\":2},\"Satisfactory\":{\"BatStateU\":2,\"Others\":2},\"Fair\":{\"BatStateU\":22,\"Others\":2},\"Poor\":{\"BatStateU\":2,\"Others\":2}}', '{\"Excellent\":{\"BatStateU\":2,\"Others\":22},\"Very Satisfactory\":{\"BatStateU\":2,\"Others\":2},\"Satisfactory\":{\"BatStateU\":2,\"Others\":4},\"Fair\":{\"BatStateU\":4,\"Others\":4},\"Poor\":{\"BatStateU\":4,\"Others\":4}}', 'photos/narrative_1746956580_0.jpeg', '[\"photos\\/narrative_1746956580_0.jpeg\",\"photos\\/narrative_1746956583_0.jpg\",\"photos\\/narrative_1746956608_0.jpeg\"]', '2', '96', 'Lipa', '2025-05-11 09:43:07', 'Lipa', '2025-05-11 09:43:30'),
+(13, 'Lipa', '2028', 'Test Activity', 'e', 'ee', 'e', 'e', 'ee', 'e', 'e', 'e', '3700.20', '{\"activity\":{\"Excellent\":{\"BatStateU\":3,\"Others\":3},\"Very Satisfactory\":{\"BatStateU\":3333,\"Others\":3},\"Satisfactory\":{\"BatStateU\":3333,\"Others\":3},\"Fair\":{\"BatStateU\":33,\"Others\":3},\"Poor\":{\"BatStateU\":3,\"Others\":3}},\"timeliness\":{\"Excellent\":{\"BatStateU\":33,\"Others\":3},\"Very Satisfactory\":{\"BatStateU\":3,\"Others\":33},\"Satisfactory\":{\"BatStateU\":333,\"Others\":33},\"Fair\":{\"BatStateU\":333,\"Others\":3},\"Poor\":{\"BatStateU\":32,\"Others\":34}}}', '{\"Excellent\":{\"BatStateU\":3,\"Others\":3},\"Very Satisfactory\":{\"BatStateU\":3333,\"Others\":3},\"Satisfactory\":{\"BatStateU\":3333,\"Others\":3},\"Fair\":{\"BatStateU\":33,\"Others\":3},\"Poor\":{\"BatStateU\":3,\"Others\":3}}', '{\"Excellent\":{\"BatStateU\":33,\"Others\":3},\"Very Satisfactory\":{\"BatStateU\":3,\"Others\":33},\"Satisfactory\":{\"BatStateU\":333,\"Others\":33},\"Fair\":{\"BatStateU\":333,\"Others\":3},\"Poor\":{\"BatStateU\":32,\"Others\":34}}', 'photos/narrative_1746957234_0.jpeg', '[\"photos\\/narrative_1746957234_0.jpeg\",\"photos\\/narrative_1746957239_0.jpg\",\"photos\\/narrative_1746957242_0.jpeg\",\"photos\\/narrative_1746957721_0.jpg\"]', '2222', 'Test 1', 'Lipa', '2025-05-11 09:54:03', 'Central', '2025-05-11 10:02:03'),
+(14, 'Lipa', '2028', 'Test Activity', '33', '3333', '3', '3', '33', '33', '3', '33', '3900.30', '{\"activity\":{\"Excellent\":{\"BatStateU\":333,\"Others\":3},\"Very Satisfactory\":{\"BatStateU\":33,\"Others\":366},\"Satisfactory\":{\"BatStateU\":3,\"Others\":3333},\"Fair\":{\"BatStateU\":44,\"Others\":666},\"Poor\":{\"BatStateU\":3,\"Others\":66}},\"timeliness\":{\"Excellent\":{\"BatStateU\":6,\"Others\":6},\"Very Satisfactory\":{\"BatStateU\":6,\"Others\":666},\"Satisfactory\":{\"BatStateU\":6622,\"Others\":6},\"Fair\":{\"BatStateU\":6,\"Others\":6},\"Poor\":{\"BatStateU\":6,\"Others\":66}}}', '{\"Excellent\":{\"BatStateU\":333,\"Others\":3},\"Very Satisfactory\":{\"BatStateU\":33,\"Others\":366},\"Satisfactory\":{\"BatStateU\":3,\"Others\":3333},\"Fair\":{\"BatStateU\":44,\"Others\":666},\"Poor\":{\"BatStateU\":3,\"Others\":66}}', '{\"Excellent\":{\"BatStateU\":6,\"Others\":6},\"Very Satisfactory\":{\"BatStateU\":6,\"Others\":666},\"Satisfactory\":{\"BatStateU\":6622,\"Others\":6},\"Fair\":{\"BatStateU\":6,\"Others\":6},\"Poor\":{\"BatStateU\":6,\"Others\":66}}', '', '[]', '222', '96', 'Lipa', '2025-05-11 10:14:10', 'Lipa', '2025-05-12 02:11:28'),
+(15, 'Lipa', '2026', 'Test Activity', 'e222', 'ee222', 'e', 'e', 'ee', 'eee', '33', '39', '6006.40', '{\"activity\":{\"Excellent\":{\"BatStateU\":9991,\"Others\":9},\"Very Satisfactory\":{\"BatStateU\":9999,\"Others\":9},\"Satisfactory\":{\"BatStateU\":9922222,\"Others\":9},\"Fair\":{\"BatStateU\":99,\"Others\":99},\"Poor\":{\"BatStateU\":99,\"Others\":99}},\"timeliness\":{\"Excellent\":{\"BatStateU\":99522221,\"Others\":9},\"Very Satisfactory\":{\"BatStateU\":922,\"Others\":9},\"Satisfactory\":{\"BatStateU\":91,\"Others\":99},\"Fair\":{\"BatStateU\":92,\"Others\":99},\"Poor\":{\"BatStateU\":91,\"Others\":9}}}', '{\"Excellent\":{\"BatStateU\":9991,\"Others\":9},\"Very Satisfactory\":{\"BatStateU\":9999,\"Others\":9},\"Satisfactory\":{\"BatStateU\":9922222,\"Others\":9},\"Fair\":{\"BatStateU\":99,\"Others\":99},\"Poor\":{\"BatStateU\":99,\"Others\":99}}', '{\"Excellent\":{\"BatStateU\":99522221,\"Others\":9},\"Very Satisfactory\":{\"BatStateU\":922,\"Others\":9},\"Satisfactory\":{\"BatStateU\":91,\"Others\":99},\"Fair\":{\"BatStateU\":92,\"Others\":99},\"Poor\":{\"BatStateU\":91,\"Others\":9}}', 'photos/narrative_1746959218_0.jpg', '[\"photos\\/narrative_1746959218_0.jpg\",\"photos\\/narrative_1746959221_0.jpeg\",\"photos\\/narrative_1746959229_0.jpeg\",\"photos\\/narrative_1747010642_0.png\",\"photos\\/narrative_1747014583_0.jpg\",\"photos\\/narrative_1747016931_0.jpg\"]', '55', 'Test 4', 'Lipa', '2025-05-11 10:27:11', 'Lipa', '2025-05-12 02:28:53'),
+(17, 'Lipa', '2028', 'Activity B', '22', '22', '222', '22', '222', '2222', '222', '222', '3500.75', '{\"activity\":{\"Excellent\":{\"BatStateU\":54,\"Others\":545},\"Very Satisfactory\":{\"BatStateU\":44,\"Others\":3444},\"Satisfactory\":{\"BatStateU\":5,\"Others\":44},\"Fair\":{\"BatStateU\":454,\"Others\":44},\"Poor\":{\"BatStateU\":444,\"Others\":44}},\"timeliness\":{\"Excellent\":{\"BatStateU\":7,\"Others\":7},\"Very Satisfactory\":{\"BatStateU\":7666,\"Others\":6277},\"Satisfactory\":{\"BatStateU\":565,\"Others\":6},\"Fair\":{\"BatStateU\":56,\"Others\":66},\"Poor\":{\"BatStateU\":6,\"Others\":66}}}', '{\"Excellent\":{\"BatStateU\":54,\"Others\":545},\"Very Satisfactory\":{\"BatStateU\":44,\"Others\":3444},\"Satisfactory\":{\"BatStateU\":5,\"Others\":44},\"Fair\":{\"BatStateU\":454,\"Others\":44},\"Poor\":{\"BatStateU\":444,\"Others\":44}}', '{\"Excellent\":{\"BatStateU\":7,\"Others\":7},\"Very Satisfactory\":{\"BatStateU\":7666,\"Others\":6277},\"Satisfactory\":{\"BatStateU\":565,\"Others\":6},\"Fair\":{\"BatStateU\":56,\"Others\":66},\"Poor\":{\"BatStateU\":6,\"Others\":66}}', 'photos/narrative_1747016971_0.jpg', '[\"photos\\/narrative_1747016971_0.jpg\",\"photos\\/narrative_1747016975_0.jpeg\"]', '51', 'Test 1', 'Lipa', '2025-05-12 02:29:41', 'Central', '2025-05-12 02:30:35'),
+(18, 'Lipa', '2028', 'Activity D', '2222', '22', '2', '22', '22', '2', '22', '2454', '3100.60', '{\"activity\":{\"Excellent\":{\"BatStateU\":91,\"Others\":788},\"Very Satisfactory\":{\"BatStateU\":89,\"Others\":88},\"Satisfactory\":{\"BatStateU\":9,\"Others\":8},\"Fair\":{\"BatStateU\":7,\"Others\":7},\"Poor\":{\"BatStateU\":7,\"Others\":7}},\"timeliness\":{\"Excellent\":{\"BatStateU\":5,\"Others\":55},\"Very Satisfactory\":{\"BatStateU\":155,\"Others\":55},\"Satisfactory\":{\"BatStateU\":5555,\"Others\":5},\"Fair\":{\"BatStateU\":5,\"Others\":55},\"Poor\":{\"BatStateU\":55,\"Others\":5}}}', '{\"Excellent\":{\"BatStateU\":91,\"Others\":788},\"Very Satisfactory\":{\"BatStateU\":89,\"Others\":88},\"Satisfactory\":{\"BatStateU\":9,\"Others\":8},\"Fair\":{\"BatStateU\":7,\"Others\":7},\"Poor\":{\"BatStateU\":7,\"Others\":7}}', '{\"Excellent\":{\"BatStateU\":5,\"Others\":55},\"Very Satisfactory\":{\"BatStateU\":155,\"Others\":55},\"Satisfactory\":{\"BatStateU\":5555,\"Others\":5},\"Fair\":{\"BatStateU\":5,\"Others\":55},\"Poor\":{\"BatStateU\":55,\"Others\":5}}', 'photos/narrative_1747035916_0.jpeg', '[\"photos\\/narrative_1747035916_0.jpeg\"]', '342d', 'Test 1', 'Lipa', '2025-05-12 07:45:21', 'Central', '2025-05-12 08:19:25'),
+(19, 'Lipa', '2028', 'Activity G', 'w', 'ww', 'w', 'w', 'w', 'w', 'w', 'w1', '3800.90', '{\"activity\":{\"Excellent\":{\"BatStateU\":11,\"Others\":11},\"Very Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Satisfactory\":{\"BatStateU\":1,\"Others\":11},\"Fair\":{\"BatStateU\":1,\"Others\":11},\"Poor\":{\"BatStateU\":1,\"Others\":144}},\"timeliness\":{\"Excellent\":{\"BatStateU\":42,\"Others\":4},\"Very Satisfactory\":{\"BatStateU\":44,\"Others\":4444},\"Satisfactory\":{\"BatStateU\":44,\"Others\":4},\"Fair\":{\"BatStateU\":4,\"Others\":4},\"Poor\":{\"BatStateU\":44,\"Others\":4}}}', '{\"Excellent\":{\"BatStateU\":11,\"Others\":11},\"Very Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Satisfactory\":{\"BatStateU\":1,\"Others\":11},\"Fair\":{\"BatStateU\":1,\"Others\":11},\"Poor\":{\"BatStateU\":1,\"Others\":144}}', '{\"Excellent\":{\"BatStateU\":42,\"Others\":4},\"Very Satisfactory\":{\"BatStateU\":44,\"Others\":4444},\"Satisfactory\":{\"BatStateU\":44,\"Others\":4},\"Fair\":{\"BatStateU\":4,\"Others\":4},\"Poor\":{\"BatStateU\":44,\"Others\":4}}', 'photos/narrative_1747040659_0.jpeg', '[\"photos\\/narrative_1747040659_0.jpeg\",\"photos\\/narrative_1747040676_0.png\"]', '111', '82', 'Central', '2025-05-12 09:04:21', 'Central', '2025-05-12 09:04:37'),
+(20, 'Lipa', '2026', 'Activity A', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', '4000.50', '{\"activity\":{\"Excellent\":{\"BatStateU\":1,\"Others\":1},\"Very Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Fair\":{\"BatStateU\":1,\"Others\":1},\"Poor\":{\"BatStateU\":0,\"Others\":0}},\"timeliness\":{\"Excellent\":{\"BatStateU\":1,\"Others\":1},\"Very Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Fair\":{\"BatStateU\":1,\"Others\":1},\"Poor\":{\"BatStateU\":0,\"Others\":0}}}', '{\"Excellent\":{\"BatStateU\":1,\"Others\":1},\"Very Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Fair\":{\"BatStateU\":1,\"Others\":1},\"Poor\":{\"BatStateU\":0,\"Others\":0}}', '{\"Excellent\":{\"BatStateU\":1,\"Others\":1},\"Very Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Satisfactory\":{\"BatStateU\":1,\"Others\":1},\"Fair\":{\"BatStateU\":1,\"Others\":1},\"Poor\":{\"BatStateU\":0,\"Others\":0}}', 'photos/narrative_1747203206_0.jpeg', '[\"photos\\/narrative_1747203206_0.jpeg\"]', '1', 'Test 2', 'Lipa', '2025-05-14 06:13:27', NULL, NULL);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
